@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Routes, Route, Navigate } from 'react-router-dom'
 import './App.css'
 import Login from './components/pages/Login'

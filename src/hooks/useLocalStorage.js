@@ -1,12 +1,21 @@
 import { useState } from 'react';
 
-
 /**
  * A localStorage hook to be used to access localStorage
  *
- * @param {*} key
+ * @example
+ * // returns null if user is not set
+ * // otherwise returns the set user
+ * const [user, setUser] = useLocalStorage('user', null);
+ *
+ * @example
+ * // sets 'token' to the provided token in localStorage
+ * // and returns the set token
+ * const [token, setToken] = useLocalStorage('token', 'sample_token');
+ *
+ * @param {String} key
  * @param {*} defaultValue
- * @returns {{}}
+ * @returns {[*, ()=>void]}
  */
 export const useLocalStorage = (key, defaultValue) => {
     const [storedValue, setStoredValue] = useState(() => {
@@ -21,6 +30,8 @@ export const useLocalStorage = (key, defaultValue) => {
                 // Otherwise set the value of the 'key'
                 // as the provided value
                 localStorage.setItem(key, JSON.stringify(defaultValue));
+                // return the set value
+                return defaultValue;
             }
         } catch (error) {
             // If there is an error, return the default value

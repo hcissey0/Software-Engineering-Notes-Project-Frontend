@@ -8,6 +8,7 @@ import { useState } from 'react';
  * // otherwise returns the set user
  * const [user, setUser] = useLocalStorage('user', null);
  *
+ * 
  * @example
  * // sets 'token' to the provided token in localStorage
  * // and returns the set token

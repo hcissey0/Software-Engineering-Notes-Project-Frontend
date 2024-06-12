@@ -7,7 +7,7 @@ const Login = () => {
       <div className="absolute top-5 right-5">
         <ThemeToggle />
       </div>
-      <form className="min-w-96 max-w-sm p-12 rounded-2xl shadow-xl">
+      <form className="min-w-96 max-w-sm p-12 rounded-2xl shadow-xl bg-white dark:bg-slate-800">
         <h1 className="login text-2xl font-bold text-gray-950 mb-4 dark:text-white">Login</h1>
         <div className="mb-5">
           <label

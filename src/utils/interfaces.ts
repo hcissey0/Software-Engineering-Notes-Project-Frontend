@@ -11,4 +11,5 @@ export interface NoteInterface {
 export interface Label {
     id: string
     title: string
+    notes: NoteInterface
 }

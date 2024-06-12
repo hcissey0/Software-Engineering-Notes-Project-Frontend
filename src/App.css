@@ -1,0 +1,14 @@
+h1.login {
+    position: relative;
+}
+
+h1.login::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 28px;
+    border-radius: 12px;
+    background: #0062be;
+}

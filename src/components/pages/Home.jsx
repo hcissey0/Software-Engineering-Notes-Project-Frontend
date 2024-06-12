@@ -18,7 +18,7 @@ const Home = () => {
     }
     func();
   }, []);
-  console.log(notes)
+
 
   const handleDisplayMode = (e) => {
     setDisplayMode(e.target.value);

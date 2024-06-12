@@ -1,13 +1,17 @@
 import "../../App.css"
+import ThemeToggle from "../atoms/ThemeToggle"
 
 const Login = () => {
   return (
     <div className="w-screen h-screen flex items-center justify-center">
-      <form className="min-w-96 max-w-sm p-12 rounded-2xl shadow-xl">
-        <h1 className="login text-2xl font-bold text-gray-950 mb-4">Login</h1>
+      <div className="absolute top-5 right-5">
+        <ThemeToggle />
+      </div>
+      <form className="min-w-96 max-w-sm p-12 rounded-2xl shadow-xl bg-white dark:bg-slate-800">
+        <h1 className="login text-2xl font-bold text-gray-950 mb-4 dark:text-white">Login</h1>
         <div className="mb-5">
           <label
-            for="email"
+            htmlFor="email"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Your email
@@ -22,7 +26,7 @@ const Login = () => {
         </div>
         <div className="mb-5">
           <label
-            for="password"
+            htmlFor="password"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Your password
@@ -45,7 +49,7 @@ const Login = () => {
             />
           </div>
           <label
-            for="remember"
+            htmlFor="remember"
             className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
           >
             Remember me

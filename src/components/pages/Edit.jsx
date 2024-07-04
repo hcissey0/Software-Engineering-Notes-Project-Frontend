@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import API from "../../utils/api";
-import Card from "../organisms/Card"
-
+import Card from "../organisms/Card";
+// import FroalaEditor from "froala-editor";
+import EditorJS from "@editorjs/editorjs";
+import moment from "moment";
 
 const Edit = () => {
   const [status, setStatus] = useState("");
@@ -10,10 +12,13 @@ const Edit = () => {
   const [notes, setNotes] = useState([]);
   const [selectedNote, setSelectedNote] = useState(null);
 
+  // const editor = new FroalaEditor('#editBox');
+  const editor = new EditorJS({
+    holder: "editorjs",
+  });
+
   useEffect(() => {
     async function func() {
-      const data = await API.status();
-      setStatus(data.status);
       const notes = await API.getNotes();
       setNotes(notes);
     }
@@ -29,11 +34,15 @@ const Edit = () => {
     notes.sort((a, b) => {
       return new Date(a.created) - new Date(b.created);
     });
-    setNotes(notes)
+    setNotes(notes);
   };
   return (
     <div className="text-black dark:text-white border flex overflow-auto">
-      <div className={` border flex-[1] ${selectedNote ? 'hidden' : 'flex'} lg:flex flex-col`}>
+      <div
+        className={` border flex-[1] ${
+          selectedNote ? "hidden" : "flex"
+        } lg:flex flex-col`}
+      >
         <div className="borde w-full flex justify-between items-center p-3">
           <div className="flex items-center gap-1">
             <p className="text-black opacity-50 text-xs dark:text-white">
@@ -125,12 +134,37 @@ const Edit = () => {
           </div>
         </div>
         <div className="overflow-y-auto">
-          {notes.map((note) => (
-            <Card key={note.id} list={displayMode === 'list'} note={note} />
-          ))}
+          <ul
+            role="list"
+            className="divide-y divide-gray-200 dark:divide-gray-700"
+          >
+            {notes.map((note) => (
+              <li key={note.id} className="transition-all py-3 sm:py-4 cursor-pointer bg-white dark:bg-gray-900 dark:hover:bg-gray-800 hover:bg-neutral-100">
+                <div className="flex items-center">
+                  <div className="flex-1 min-w-0 ms-4">
+                    <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
+                      {note.title}
+                    </p>
+                    <p className="text-sm text-gray-500 truncate dark:text-gray-400">
+                      {note.text}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-end pr-3 text-xs items-center text-neutral-500">
+                  {moment(note.created).fromNow()}
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-      <div className={`border flex-[3] ${selectedNote ? 'flex' : 'hidden'} md:flex`}>edit area</div>
+      <div
+        className={`border flex-[3] ${
+          selectedNote ? "flex" : "hidden"
+        } md:flex`}
+      >
+        <div id="editorjs" className="h-full"></div>
+      </div>
     </div>
   );
 };

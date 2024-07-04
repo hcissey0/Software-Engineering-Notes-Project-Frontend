@@ -11,8 +11,6 @@ const Home = () => {
 
   useEffect(() => {
     async function func() {
-      const data = await API.status();
-      setStatus(data.status);
       const notes = await API.getNotes();
       setNotes(notes);
     }

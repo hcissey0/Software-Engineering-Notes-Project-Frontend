@@ -24,19 +24,51 @@ import './edit.css'
 
 function Edit() {
   const[value, setValue] = useState("");
+  const domain = 'http://192.168.110.101:8000';
+  
+  const createNote = async ()=>{
+     const response = await fetch( domain + '/api/create-note/', {
+      method: 'POST', 
+      body:JSON.stringify({
+        'text': value,
+        'author': 'james',
+      }),
+      headers:{'Content-Type': 'application/json'}
+     });
+     const data = await response.json();
+     console.log(data);
+  };
+
+  const getCredentials = async ()=> {
+    const response = await fetch(domain + '/api/token/',{
+      method: 'POST',
+      body:JSON.stringify({username: 'james', password: 'easytoguess'}),
+      headers:{'Content-Type': 'application/json'}
+    });
+
+    const data = await response.json();
+    // console.log(data)
+    localStorage.setItem('user_token', data.access)
+  };
+
   return (
     <>
       <div className='container'>
         <div className="row">
           <div className="editor">
             <ReactQuill theme='snow' value={value} 
-              onChange={()=> setValue(e.target.value)}
+              onChange={(text)=>{setValue(text)}}
               className='editor-input'
               modules={modules}
             />
           </div>
         </div>
        </div>
+
+       <button className="button bg-sky-500 p-1 rounded-md hover:bg-sky-700" onClick={createNote}>Save</button>
+       <button className="button mx-2 bg-sky-500 p-1 rounded-md hover:bg-sky-700" onClick={getCredentials}>login</button>
+
+       
     </>
   );
 }

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import API from "../../utils/api";
 import Card from "../organisms/Card";
 import './edit.css'
+import { getNotes } from "../../utils/jsonServer";
 
 const Home = () => {
   const [status, setStatus] = useState("");
@@ -10,9 +11,11 @@ const Home = () => {
   const [sortMode, setSortMode] = useState("date");
   const [notes, setNotes] = useState([]);
 
+  // get all notes
   useEffect(() => {
     async function func() {
-      const notes = await API.getNotes();
+      // const notes = await API.getNotes();
+      const notes = await getNotes(); // ! run json server first  
       setNotes(notes);
     }
     func();

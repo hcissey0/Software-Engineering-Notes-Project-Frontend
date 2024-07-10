@@ -1,6 +1,9 @@
 import React, {useState } from 'react';
 import ReactQuill from 'react-quill';
 import "react-quill/dist/quill.snow.css";
+import Card from '../organisms/Card';
+import moment from "moment";
+
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 // import './App.css'
@@ -51,19 +54,47 @@ function Edit() {
     localStorage.setItem('user_token', data.access)
   };
 
+  const notes = [
+    {
+      id : '1',
+      title : 'Python as a note',
+      label : 'code',
+      author : '1',
+      text : 'Python is a programming language',
+      created : '2021-10-10T12:00:00.000Z',
+      modified : '2021-10-10T12:00:00.000Z',
+    },
+    {
+      id : '2',
+      title : 'JavaScript as a note',
+      label : 'Education',
+      author : '1',
+      text : 'JavaScript is a programming language',
+      created : '2021-11-10T12:00:00.000Z',
+      modified : '2021-11-10T12:00:00.000Z',
+    }
+  ];
+
+
   return (
     <>
-      <div className='container'>
-        <div className="row">
-          <div className="editor">
+     <div className='edit-container'>
+       <div className="notes">
+        {notes.map((note)=><Card note={note} key={note.id}/>)}
+       </div>
+       
+      <div className='border editor'>
+        <div className=" border border-blue-500 ">
+          <div className="">
             <ReactQuill theme='snow' value={value} 
               onChange={(text)=>{setValue(text)}}
-              className='editor-input'
+              className='w-full min-h-[80vh]'
               modules={modules}
             />
           </div>
         </div>
        </div>
+     </div>
 
        <button className="button bg-sky-500 p-1 rounded-md hover:bg-sky-700" onClick={createNote}>Save</button>
        <button className="button mx-2 bg-sky-500 p-1 rounded-md hover:bg-sky-700" onClick={getCredentials}>login</button>

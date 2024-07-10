@@ -2,14 +2,31 @@ import React from "react";
 import TimeDisplay from "../atoms/TimeDisplay";
 import Badge from "../atoms/Badge";
 import moment from "moment";
+import './Card.css';
 
-const Card = ({ note, list = false }) => {
+
+
+const Card = ({ note, list = false}) => {
+
+  function truncateText(text) {
+   const words = text.split(' '); // an array of all words
+   const length = words.length; // total number of words
+   const maxWords = 4; // total number of words before ellipsis
+   const truncatedText = words.slice(0, maxWords).join(' '); // part before truncation
+  //  const part2 = words.slice(maxWords).join(' '); // part after truncation
+   return truncatedText;
+  }
+   
+  const truncatedText = truncateText(note.text);
+  // // Call the function to truncate text to 30 words
+  // truncateText('text-container', 30);
   return (
     <div
       className={` ${
         list ? "w-full" : ""
-      } transition-all max-w-ful p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-xl hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700`}
+      } transition-all basis-1/4 max-w-full p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-xl hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700`}
     >
+     {/* title section  */}
       <div className="flex justify-between">
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           {note.title || "Noteworthy technology acquisitions 2021"}
@@ -75,11 +92,27 @@ const Card = ({ note, list = false }) => {
           </div>
         </div>
       </div>
-      <p className="font-normal text-gray-700 dark:text-gray-400">
-        {note.text ||
-          "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order."}
-      </p>
 
+      {/* this is the text */}
+      <div className="text-container" id="text-container">
+        <p className="font-normal text-sm text-gray-700 dark:text-gray-400">
+        {/* {note.text |
+          "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order."} */}
+          {truncatedText + '... '}
+        </p>
+
+        {/* the truncated part */}
+
+      </div>
+      
+      {/* <div className="truncate w-28">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit.
+           Nostrum quo neque non, blanditiis in minima voluptates 
+          consequatur iusto distinctio veniam commodi tempora voluptate voluptatum,
+           ipsa deserunt exercitationem rem vel repellat?
+      </div> */}
+
+       {/* footer section */}
       <div className="flex items-center justify-between mt-4">
         <div className="text-black opacity-45 dark:text-white text-xs">
           {moment(note.created).fromNow()}

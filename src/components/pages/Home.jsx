@@ -1,7 +1,8 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import API from "../../utils/api";
 import Card from "../organisms/Card";
-import React from "react";
+import './edit.css'
 
 const Home = () => {
   const [status, setStatus] = useState("");
@@ -118,12 +119,21 @@ const Home = () => {
           </ul>
         </div>
       </div>
-      <div
+
+      {/* Displaying cards  */}
+
+      {/* <div
         className={`transition-all duration-300 flex w-full justify-center items-center ${
           displayMode === "list" ? "flex-col" : "flex-wrap"
         } gap-2`}
       >
         {notes.map((note) => (
+          <Card key={note.id} note={note} list={displayMode === "list"} />
+        ))}
+      </div> */}
+
+      <div className="cards">
+         {notes.map((note) => (
           <Card key={note.id} note={note} list={displayMode === "list"} />
         ))}
       </div>

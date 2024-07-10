@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "../../App.css";
 import ThemeToggle from "../atoms/ThemeToggle";
 import Result from "postcss/lib/result";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Signup = () => {
   let navigate = useNavigate();
   const [inputs, setInputs] = useState({});
   const handleChange = (event) => {
@@ -14,14 +14,16 @@ const Login = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(inputs);
+    // console.log(inputs);
     const form = document.querySelector("form");
     const data = JSON.stringify(inputs);
-    const response = await fetch("http://192.168.137.168:8000/api/token/", {
+    const response = await fetch("http://192.168.137.168:8000/api/signup/", {
       method: "POST",
       body: data,
       headers: {
         "Content-Type": "application/json",
+        Authorization:
+          "Bearer" + JSON.parse(localStorage.getItem("user_details")).access,
       },
     });
     const resp_data = await response.json();
@@ -29,13 +31,6 @@ const Login = () => {
     console.log(response.statusText, response.status);
 
     if (response.status === 200) {
-      const access = resp_data.access;
-      const refresh = resp_data.refresh;
-      const user_details = {
-        access: access,
-        refresh: refresh,
-      };
-      localStorage.setItem("user_details", JSON.stringify(user_details));
       form.submit();
       return true;
     }
@@ -51,19 +46,19 @@ const Login = () => {
         action="/edit"
         onSubmit={(e) => {
           if (handleSubmit(e) === true) {
-            navigate("/");
+            navigate("/login");
           }
         }}
       >
-        <h1 className="login text-2xl font-bold text-gray-950 mb-4 dark:text-white">
-          Login
+        <h1 className="signup text-2xl font-bold text-gray-950 mb-4 dark:text-white">
+          Signup
         </h1>
         <div className="mb-5">
           <label
             htmlFor="username"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Your username
+            Username
           </label>
           <input
             type="text"
@@ -77,10 +72,27 @@ const Login = () => {
         </div>
         <div className="mb-5">
           <label
+            htmlFor="email"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Email
+          </label>
+          <input
+            type="text"
+            id="email"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="email"
+            name="email"
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-5">
+          <label
             htmlFor="password"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Your password
+            Password
           </label>
           <input
             type="password"
@@ -113,7 +125,7 @@ const Login = () => {
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           onClick={(e) => {
             if (handleSubmit(e) === true) {
-              navigate("/");
+              navigate("/login");
             }
           }}
         >
@@ -124,4 +136,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

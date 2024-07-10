@@ -5,6 +5,7 @@ import Home from "./components/pages/Home";
 import API from "./utils/api";
 import Layout from "./components/pages/Layout";
 import Edit from "./components/pages/Edit";
+import Signup from "./components/pages/Signup";
 
 const PrivateRoute = ({ children }) => {
   const user = "e"; // to be implemented
@@ -27,6 +28,15 @@ function App() {
           element={
             <PublicRoute>
               <Login />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <Signup />
             </PublicRoute>
           }
         />

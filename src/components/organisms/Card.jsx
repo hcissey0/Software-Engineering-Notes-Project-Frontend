@@ -7,7 +7,7 @@ import './Card.css';
 
 
 const Card = ({ note, list = false}) => {
-
+  // shorten the text in the card
   function truncateText(text) {
    const words = text.split(' '); // an array of all words
    const length = words.length; // total number of words
@@ -21,14 +21,16 @@ const Card = ({ note, list = false}) => {
   // // Call the function to truncate text to 30 words
   // truncateText('text-container', 30);
   return (
+    // The div below is the whole card
     <div
       className={` ${
         list ? "w-full" : ""
-      } transition-all basis-1/4 max-w-full p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-xl hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700`}
+      } transition-all basis-1/4 max-w-full p-4 cursor-pointer bg-white border border-transparent rounded-md shadow-sm hover:shadow-md hover:bg-sky-100/80 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700`}
     >
+      
      {/* title section  */}
       <div className="flex justify-between">
-        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-800 dark:text-white">
           {note.title || "Noteworthy technology acquisitions 2021"}
         </h5>
         <div>
@@ -39,7 +41,7 @@ const Card = ({ note, list = false}) => {
             type="button"
           >
             <svg
-              className="w-5 h-5"
+              className="w-3 aspect-square"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
@@ -117,10 +119,14 @@ const Card = ({ note, list = false}) => {
         <div className="text-black opacity-45 dark:text-white text-xs">
           {moment(note.created).fromNow()}
         </div>
-
-        <div>
+           
+          {
+            // if there's no label then we don't show the badge
+          note.label && <div>
           <Badge rounded color="blue" text={note.label} />
-        </div>
+          </div>
+          }
+        
       </div>
     </div>
   );

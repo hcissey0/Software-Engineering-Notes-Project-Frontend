@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import SearchBox from "../molecules/SearchBox";
 import ThemeToggle from "../atoms/ThemeToggle";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 const Layout = ({ children }) => {
@@ -205,7 +205,9 @@ const Layout = ({ children }) => {
         </div>
       </aside>
 
-      <div className="mt-[71px] sm:ml-64">{children}</div>
+      <div className="mt-[71px] sm:ml-64">
+        <Outlet/>
+      </div>
     </>
   );
 };

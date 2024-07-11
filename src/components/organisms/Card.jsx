@@ -6,7 +6,7 @@ import './Card.css';
 
 
 
-const Card = ({ note, list = false}) => {
+const Card = ({ note, list = false, addClass=''}) => {
   // shorten the text in the card
   function truncateText(text) {
    const words = text.split(' '); // an array of all words
@@ -23,9 +23,9 @@ const Card = ({ note, list = false}) => {
   return (
     // The div below is the whole card
     <div
-      className={` ${
+      className={`${addClass} ${
         list ? "w-full" : ""
-      } transition-all basis-1/4 max-w-full p-4 cursor-pointer bg-white border border-transparent rounded-md shadow-sm hover:shadow-md hover:bg-sky-100/80 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700`}
+      } transition-all basis-1/4 max-w-full p-4 cursor-pointer bg-white border border-transparent rounded-md shadow-sm hover:shadow-md hover:bg-blue-100/70  dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700`}
     >
       
      {/* title section  */}
@@ -40,7 +40,10 @@ const Card = ({ note, list = false}) => {
             className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-inherit dark:bg-inherit hover:bg-inherit rounded-lg focus:ring-0 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             type="button"
           >
-            <svg
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="w-5 aspect-square" viewBox="0 0 24 24" >
+            <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z">
+            </path></svg>
+            {/* <svg
               className="w-3 aspect-square"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +51,8 @@ const Card = ({ note, list = false}) => {
               viewBox="0 0 4 15"
             >
               <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
-            </svg>
+            </svg> */}
+
           </button>
           <div
             id={"dropdown" + note.id}

@@ -4,6 +4,7 @@ import API from "../../utils/api";
 import Card from "../organisms/Card";
 import './edit.css'
 import { getNotes } from "../../utils/jsonServer";
+import { placeholderCards } from "../organisms/CardSkeleton";
 
 const Home = () => {
   const [status, setStatus] = useState("");
@@ -16,7 +17,8 @@ const Home = () => {
     async function func() {
       // const notes = await API.getNotes();
       const notes = await getNotes(); // ! run json server first  
-      setNotes(notes);
+      // setTimeout(()=>{setNotes(notes);}, 2000); intentional delay
+      setNotes(notes);      
     }
     func();
   }, []);
@@ -34,7 +36,10 @@ const Home = () => {
 
   return (
     <div className="flex flex-col gap-4 justify-center items-center p-4">
-      <div className="borde w-full flex justify-between items-center">
+      
+      {/* * sorting  */}
+
+      {/* <div className="borde w-full flex justify-between items-center">
         <div className="flex items-center gap-2">
           <p className="text-black opacity-40 dark:text-white">Sort by:</p>
           <form className="max-w-sm w-20">
@@ -121,7 +126,7 @@ const Home = () => {
             </li>
           </ul>
         </div>
-      </div>
+      </div> */}
 
       {/* Displaying cards  */}
 
@@ -135,11 +140,20 @@ const Home = () => {
         ))}
       </div> */}
 
-      <div className="cards">
-         {notes.map((note) => (
-          <Card key={note.id} note={note} list={displayMode === "list"} />
-        ))}
-      </div>
+      {notes.length > 0 && 
+        <div className="cards w-full">
+          {notes.map((note) => (
+            <Card key={note.id} note={note} list={displayMode === "list"} />
+          ))}
+        </div>
+      }
+
+      {notes.length == 0 && 
+        <div class="cards w-full">
+          {placeholderCards(5)}
+        </div>
+      }
+
     </div>
   );
 };

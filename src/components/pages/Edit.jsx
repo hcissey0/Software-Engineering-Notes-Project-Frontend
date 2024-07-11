@@ -78,26 +78,22 @@ function Edit() {
 
   return (
     <>
-     <div className='edit-container'>
-       <div className="notes">
-        {notes.map((note)=><Card note={note} key={note.id}/>)}
+     <div className='edit-container gap-2 items-start'>
+       <div className="notes p-2">
+        {notes.map((note)=><Card addClass='mb-2' note={note} key={note.id}/>)}
        </div>
        
-      <div className='border editor'>
-        <div className=" border border-blue-500 ">
-          <div className="">
+      <div className='mt-4 editor'>
             <ReactQuill theme='snow' value={value} 
               onChange={(text)=>{setValue(text)}}
-              className='w-full min-h-[80vh]'
+              className='w-full'
               modules={modules}
             />
-          </div>
-        </div>
        </div>
      </div>
 
-       <button className="button bg-sky-500 p-1 rounded-md hover:bg-sky-700" onClick={createNote}>Save</button>
-       <button className="button mx-2 bg-sky-500 p-1 rounded-md hover:bg-sky-700" onClick={getCredentials}>login</button>
+       {/* <button className="button bg-sky-500 p-1 rounded-md hover:bg-sky-700" onClick={createNote}>Save</button>
+       <button className="button mx-2 bg-sky-500 p-1 rounded-md hover:bg-sky-700" onClick={getCredentials}>login</button> */}
 
        
     </>

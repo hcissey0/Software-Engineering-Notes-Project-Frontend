@@ -1,10 +1,11 @@
 .profile-container{
     width: 100%;
     height: 100vh;
-    border: 2px solid black;
+    border: none;
 }
 .cover-photo{
     position: relative;
+    border-radius: 7px;
     background: rgb(2, 0, 36);
     background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 22%, rgba(0, 212, 255, 1) 100%);
     height: 40%;
@@ -28,7 +29,6 @@
 }
 .profile-information-box h3{
     font-size: 30px;
-    margin-top: 70px;
 }
 .profile-image{
     width: 165px;
@@ -46,3 +46,34 @@
     background-color: rgba(255, 255, 255, .15);
     backdrop-filter: blur(4px);
 }
+.camera{
+    position: absolute;
+    z-index: 200;
+    bottom: -20%;
+    right: 42%;
+}
+ .profile-information-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    margin: 50px 0;
+    padding: 20px;
+    border-radius: 10px;
+    width: 70%;
+    height: 100%;
+    flex-grow: inherit;
+    box-shadow: 10px 10px 20px #babecc, -10px -10px 20px #ffffff;
+ }
+ .profile-information-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+ }
+ .profile-information{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+ }

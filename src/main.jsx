@@ -8,6 +8,7 @@ import Home from './components/pages/Home.jsx'
 import Login from './components/pages/Login.jsx'
 import { loginAction, signupAction } from './utils/actions.js'
 import Edit from './components/pages/Edit.jsx'
+import Profile from './components/pages/Profile.jsx'
 import Signup from './components/pages/Signup.jsx'
 
 // routes for the application
@@ -28,6 +29,10 @@ const router = createBrowserRouter(
         {
           path: '/test', // used to test elements I'm creating
           element: <App/>
+        },
+        {
+          path: '/Profile',
+          element: <Profile/>
         }
       ]
     }, 

@@ -23,7 +23,12 @@ const PublicRoute = ({ children }) => {
 
 const App = ()=>{
   return(
-    <CardSkeleton/>
+    <div className='p-4'>
+
+    <CardSkeleton addClass="w-1/2 mb-2"/>
+    <CardSkeleton addClass="w-1/4" />
+    
+    </div>
   );
 };
 

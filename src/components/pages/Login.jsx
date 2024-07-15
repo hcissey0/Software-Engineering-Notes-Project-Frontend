@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { useNavigate, Form, Link } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 import "../../App.css";
 import ThemeToggle from "../atoms/ThemeToggle";
-import Result from "postcss/lib/result";
 
 const Login = () => {
   // let navigate = useNavigate();
@@ -85,7 +84,7 @@ const Login = () => {
           Submit
         </button>
         <div className="mt-2 flex gap-2 justify-center">
-          <span>
+          <span className="dark:text-gray-400">
             Don't have an account? 
           </span>
           <Link to='/signup' className="text-blue-600 hover:underline underline-offset-4">

@@ -82,4 +82,29 @@
   };
     
 ```
+`fixing dropdown behaviour`
+```js
+    const dropdown = document.getElementById('dropdown'); // Replace 'dropdown' with the actual id of your dropdown
+    const dropdownRect = dropdown.getBoundingClientRect(); // get the bounding rectangle
+
+    const viewportHeight = window.innerHeight; 
+    const viewportWidth = window.innerWidth;
+
+    const dropdownBottom = dropdownRect.top + dropdownRect.height;
+    const isAtBottom = dropdownBottom >= viewportHeight;
+
+    const dropdownRight = dropdownRect.left + dropdownRect.width;
+    const isAtRightEdge = dropdownRight >= viewportWidth;
+```
+
+`parse query parameters`
+```js
+    const url = new URL(request.url);
+    const q = url.searchParams.get("q");
+```
+
+`using reloadDocument prop of link to force a reload`
+```js
+   <Link to='' reloadDocument>
+```
 

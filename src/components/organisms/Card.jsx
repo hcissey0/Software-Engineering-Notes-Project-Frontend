@@ -3,21 +3,13 @@ import TimeDisplay from "../atoms/TimeDisplay";
 import Badge from "../atoms/Badge";
 import moment from "moment";
 import './Card.css';
-
+import { Link } from "react-router-dom";
+import { truncateText } from "../../utils/global";
 
 
 const Card = ({ note, list = false, addClass=''}) => {
-  // shorten the text in the card
-  function truncateText(text) {
-   const words = text.split(' '); // an array of all words
-   const length = words.length; // total number of words
-   const maxWords = 4; // total number of words before ellipsis
-   const truncatedText = words.slice(0, maxWords).join(' '); // part before truncation
-  //  const part2 = words.slice(maxWords).join(' '); // part after truncation
-   return truncatedText;
-  }
-   
-  const truncatedText = truncateText(note.text);
+
+  const truncatedText = truncateText(note.brief);
   // // Call the function to truncate text to 30 words
   // truncateText('text-container', 30);
   return (
@@ -25,7 +17,7 @@ const Card = ({ note, list = false, addClass=''}) => {
     <div
       className={`${addClass} ${
         list ? "w-full" : ""
-      } transition-all basis-1/4 max-w-full p-4 cursor-pointer bg-white border border-transparent rounded-md shadow-sm hover:shadow-md hover:bg-blue-100/70  dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700`}
+      } transition-all basis-1/4 block max-w-full p-4 cursor-pointer bg-white border border-transparent rounded-md shadow-sm hover:bg-sky-300/20  dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700`}
     >
       
      {/* title section  */}
@@ -101,11 +93,11 @@ const Card = ({ note, list = false, addClass=''}) => {
 
       {/* this is the text */}
       <div className="text-container" id="text-container">
-        <p className="font-normal text-sm text-gray-700 dark:text-gray-400">
+        <Link to={`/edit/?note_id=${note.id}`} reloadDocument className="font-normal text-sm text-gray-700 dark:text-gray-400">
         {/* {note.text |
           "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order."} */}
           {truncatedText + '... '}
-        </p>
+        </Link>
 
         {/* the truncated part */}
 

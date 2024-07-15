@@ -1,10 +1,10 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import API from "../../utils/api";
 import Card from "../organisms/Card";
 import './edit.css'
-import { getNotes } from "../../utils/jsonServer";
+import { fromServers } from "../../utils/jsonServer";
 import { placeholderCards } from "../organisms/CardSkeleton";
+import { DOMAIN, JSON_DOMAIN } from "../../utils/global";
 
 const Home = () => {
   const [status, setStatus] = useState("");
@@ -14,13 +14,17 @@ const Home = () => {
 
   // get all notes
   useEffect(() => {
-    async function func() {
-      // const notes = await API.getNotes();
-      const notes = await getNotes(); // ! run json server first  
-      // setTimeout(()=>{setNotes(notes);}, 2000); intentional delay
-      setNotes(notes);      
-    }
-    func();
+        /*
+          I could have got the notes in the home loader but I want the card skeletons to show to represent no data
+          The home loader will completely fetch all data before the page loads which is not desirable to us at this moment
+          I'm using the home loader to check authentication instead to prevent the page from loading if the user is not authenticated
+        */ 
+      const func = async ()=>{
+        const notes = await fromServers([DOMAIN + '/api/get-notes/', JSON_DOMAIN + '/get-notes/'], {});
+        if(notes!=null)setNotes(notes);
+      };
+      func();
+    
   }, []);
 
   const handleDisplayMode = (e) => {
@@ -149,7 +153,7 @@ const Home = () => {
       }
 
       {notes.length == 0 && 
-        <div class="cards w-full">
+        <div className="cards w-full">
           {placeholderCards(5)}
         </div>
       }

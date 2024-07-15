@@ -1,7 +1,7 @@
 import { redirect } from "react-router-dom";
 import { DOMAIN } from "./global";
 
-// processes the login data
+// * processes the login data
 export const loginAction = async({request}) =>{
     console.log('login form was submitted');
     let formData = Object.fromEntries(await request.formData()); // converting the form data into an object
@@ -18,6 +18,8 @@ export const loginAction = async({request}) =>{
     if(response.ok){
         const accessToken = data.access; // get the access token if the user is successfully logged in
         localStorage.setItem('user_access_token', accessToken); // store it in local storage
+        localStorage.setItem('username',data.user.username); // store the username
+        localStorage.setItem('email',data.user.email); // store the username
         return redirect('/');
     }
     // handle the case for when the user does not exist
@@ -25,7 +27,7 @@ export const loginAction = async({request}) =>{
     return redirect('');
 };
 
-// processes the signup data
+// * processes the signup data
 export const signupAction = async({request})=>{
     let formData = Object.fromEntries(await request.formData()); // converting the form data into an object
     const response = await fetch(DOMAIN + '/api/validate-signup/', {

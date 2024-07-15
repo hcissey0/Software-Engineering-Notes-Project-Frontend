@@ -10,6 +10,7 @@ import { loginAction, signupAction } from './utils/actions.js'
 import Edit from './components/pages/Edit.jsx'
 import Profile from './components/pages/Profile.jsx'
 import Signup from './components/pages/Signup.jsx'
+import { editLoader, homeLoader } from './utils/loaders.js'
 
 // routes for the application
 const router = createBrowserRouter(
@@ -20,18 +21,20 @@ const router = createBrowserRouter(
       children:[
         {
           index:true,
-          element:<Home/>
+          element:<Home/>,
+          loader:homeLoader
         }, 
         {
           path:'/edit', 
-          element:<Edit/>
+          element:<Edit/>, 
+          loader:editLoader
         }, 
         {
           path: '/test', // used to test elements I'm creating
           element: <App/>
         },
         {
-          path: '/Profile',
+          path: '/profile',
           element: <Profile/>
         }
       ]

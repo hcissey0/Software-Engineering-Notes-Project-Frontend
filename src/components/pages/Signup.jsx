@@ -143,7 +143,7 @@ const Signup = () => {
           Submit
         </button>
         <div className="mt-2 flex gap-2 justify-center">
-          <span>
+          <span className="dark:text-gray-400">
             Already have an account? 
           </span>
           <Link to='/login' className="text-blue-600 hover:underline underline-offset-4">

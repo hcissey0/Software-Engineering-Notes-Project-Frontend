@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { useNavigate, Form } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 import "../../App.css";
 import ThemeToggle from "../atoms/ThemeToggle";
-import Result from "postcss/lib/result";
 
 const Login = () => {
   // let navigate = useNavigate();
@@ -22,13 +21,8 @@ const Login = () => {
       </div>
 
       <Form
-        className="min-w-96 max-w-sm p-12 rounded-2xl shadow-xl bg-white dark:bg-slate-800"
+        className="md:w-[500px] p-12 rounded-2xl shadow-xl bg-white dark:bg-slate-800"
         method="POST"
-        // onSubmit={(e) => {
-        //   if (handleSubmit(e) === true) {
-        //     navigate("/");
-        //   }
-        // }}
       >
         <h1 className="login text-2xl font-bold text-gray-950 mb-4 dark:text-white">
           Login
@@ -86,15 +80,17 @@ const Login = () => {
         <button
           type="submit"
           className="text-white bg-blue-700 block hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          // onClick={(e) => {
-          //   if (handleSubmit(e) === true) {
-          //     navigate("/");
-          //   }
-          // }}
         >
           Submit
         </button>
-
+        <div className="mt-2 flex gap-2 justify-center">
+          <span className="dark:text-gray-400">
+            Don't have an account? 
+          </span>
+          <Link to='/signup' className="text-blue-600 hover:underline underline-offset-4">
+            Create an account
+          </Link>
+        </div>
       </Form>
     </div>
   );

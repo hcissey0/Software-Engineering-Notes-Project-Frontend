@@ -1,14 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { loginAction } from "./utils/actions";
 import "./App.css";
-import Login from "./components/pages/Login";
-import Home from "./components/pages/Home";
-import API from "./utils/api";
-import Layout from "./components/pages/Layout";
-import Edit from "./components/pages/Edit";
-import Signup from "./components/pages/Signup";
-import CardSkeleton from "./components/organisms/CardSkeleton";
-
+import Avatar from "./components/atoms/Avatar";
+import AvatarSkeleton from "./components/atoms/AvatarSkeleton";
 const PrivateRoute = ({ children }) => {
   const user = "e"; // to be implemented
   if (!user) return <Navigate to={"/login"} />;
@@ -23,7 +17,9 @@ const PublicRoute = ({ children }) => {
 
 const App = ()=>{
   return(
-    <CardSkeleton/>
+    <div className='p-4'>
+     {/* <AvatarSkeleton/> */}
+    </div>
   );
 };
 

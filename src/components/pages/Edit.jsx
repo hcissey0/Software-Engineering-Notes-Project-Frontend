@@ -1,13 +1,14 @@
-import React, {useState } from 'react';
+import React, {useEffect, useState, useRef } from 'react';
 import ReactQuill from 'react-quill';
+import { Quill } from 'react-quill';
 import "react-quill/dist/quill.snow.css";
 import Card from '../organisms/Card';
-import moment from "moment";
-
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
 import './edit.css'
+import { DOMAIN, JSON_DOMAIN } from '../../utils/global';
+import { truncateText } from '../../utils/global';
+import { useLoaderData } from 'react-router-dom';
+import { fetchData } from '../../utils/jsonServer';
+import { placeholderCards } from '../organisms/CardSkeleton';
 
     const modules = {
       toolbar : [
@@ -21,14 +22,30 @@ import './edit.css'
           {indent : "-1"},
           {indent : "+1"},
         ],
-        [ "link", "image", "video" ],
+        [ "link", "image" ],
       ],
     };
 
+// * Deltas may be useful later for parsing some stuff
 function Edit() {
-  const[value, setValue] = useState("");
-  const domain = 'http://192.168.110.101:8000';
-  
+  // ! lots of bugs here (will be fixed later)
+  const note = useLoaderData();
+  const [value, setValue] = useState(note.content);
+  const [title, setTitle] = useState(note.title || 'Untitled');
+  const [notes, setNotes] = useState([]);
+  const quillRef = useRef();
+  const titleRef = useRef();
+
+  useEffect(
+    ()=>{
+      const func = async()=>{
+        const notes = await fetchData(DOMAIN + '/api/get-notes/', {auth: true}); 
+        if(notes!=null)setNotes(notes);
+      }
+      func();
+    }
+  , []);
+
   const createNote = async ()=>{
      const response = await fetch( domain + '/api/create-note/', {
       method: 'POST', 
@@ -54,41 +71,65 @@ function Edit() {
     localStorage.setItem('user_token', data.access)
   };
 
-  const notes = [
-    {
-      id : '1',
-      title : 'Python as a note',
-      label : 'code',
-      author : '1',
-      text : 'Python is a programming language',
-      created : '2021-10-10T12:00:00.000Z',
-      modified : '2021-10-10T12:00:00.000Z',
-    },
-    {
-      id : '2',
-      title : 'JavaScript as a note',
-      label : 'Education',
-      author : '1',
-      text : 'JavaScript is a programming language',
-      created : '2021-11-10T12:00:00.000Z',
-      modified : '2021-11-10T12:00:00.000Z',
+  const handleSave = async ()=>{
+    const editor = quillRef.current.unprivilegedEditor; 
+    const brief = truncateText(editor.getText()); 
+    const note = {
+      'author': localStorage.getItem('username'), 
+      'title': titleRef.current.innerText || 'Untitled',
+      'brief': brief, 
+      'content': editor.getHTML()
     }
-  ];
+    const data = await fetchData(DOMAIN + '/api/create-note/', {method:'POST', body:note});
+    console.log(data); 
+    // const response = await fetch(DOMAIN + '/api/create-note/', {
+    //   method: 'POST', 
+    //   body:JSON.stringify(note),
+    //   headers: {
+    //     'Content-Type': 'application/json', 
+    //   }
+    // })
 
+    // const data = await response.json(); 
+    // console.log(data);
+  };
 
   return (
     <>
      <div className='edit-container gap-2 items-start'>
-       <div className="notes p-2">
+      {notes.length == 0 && 
+        <div className='p-2 w-1/4 flex flex-col gap-y-2'>
+         {placeholderCards(5)} 
+        </div>
+      }
+
+      {notes.length > 0 && 
+          <div className="p-2 w-1/4 flex flex-col gap-y-2">
+            {notes.map((note) => (
+              <Card key={note.id} note={note}/>
+            ))}
+          </div>
+        }
+       {/* <div className="notes p-2">
         {notes.map((note)=><Card addClass='mb-2' note={note} key={note.id}/>)}
-       </div>
-       
-      <div className='mt-4 editor'>
-            <ReactQuill theme='snow' value={value} 
+       </div> */}
+     
+      <div className='p-4 editor'>
+        <div contentEditable ref={titleRef} className='outline-0 mb-2'>{title}</div>
+            <ReactQuill
+              // theme='snow'
+              value={value}
               onChange={(text)=>{setValue(text)}}
+              ref={quillRef}
               className='w-full'
               modules={modules}
             />
+
+            <div>
+            <button type="button" 
+            onClick={handleSave}
+            className="text-white rounded-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium mt-4 text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Save</button>
+            </div>
        </div>
      </div>
 

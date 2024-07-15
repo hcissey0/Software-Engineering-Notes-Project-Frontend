@@ -28,10 +28,10 @@ const CardSkeleton = ({addClass=''}) => {
     
           {/* this is the text */}
           
-            <p className="font-normal text-sm text-gray-700 dark:text-gray-400">
+            <div className="font-normal text-sm text-gray-700 dark:text-gray-400">
               <div className='h-3 w-1/2 bg-gray-500 mb-3 animate-pulse rounded-md'></div>
               <div className='h-3 w-1/3 bg-gray-500 animate-pulse rounded-md'></div>
-            </p>
+            </div>
     
        
     

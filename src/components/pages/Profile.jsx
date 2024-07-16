@@ -17,14 +17,27 @@ const Profile = () => {
             </div>
             <div className="profile-information-container">
                 <div className='profile-information-box'>
+                    <label className='edit-profile'>Edit Profile</label>
                     <h3>Fred Pekyi</h3>
-                    <div className="profile-information">
-                        <p>Number of Notes = 23</p>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                    </div>
+                    <form className='profile-form'>
+                       <div className="input-box">
+                        <label>Name</label>
+                        <input type="text" placeholder='Enter name' />
+                       </div>
+                       <div className="input-box">
+                        <label>Email</label>
+                        <input type="text" placeholder='Enter email' />
+                       </div>
+                       <div className="input-box">
+                        <label>Phone Number</label>
+                        <input type="text" placeholder='Mobile number' />
+                       </div>
+                       <div className="input-box">
+                        <label>Name</label>
+                        <input type="text" />
+                       </div>
+                    </form>
+                    <button className='save-profile'>Save</button>
                 </div>
             </div>
         </div>

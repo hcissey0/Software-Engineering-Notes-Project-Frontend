@@ -5,6 +5,7 @@ import moment from "moment";
 import './Card.css';
 import { Link } from "react-router-dom";
 import { truncateText } from "../../utils/global";
+import Dropdown from "./Dropdown";
 
 
 const Card = ({ note, list = false, addClass=''}) => {
@@ -17,7 +18,7 @@ const Card = ({ note, list = false, addClass=''}) => {
     <div
       className={`${addClass} ${
         list ? "w-full" : ""
-      } transition-all basis-1/4 block max-w-full p-4 cursor-pointer bg-white border border-transparent rounded-md shadow-sm hover:bg-sky-300/20  dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700`}
+      } transition-all basis-1/4 block relative max-w-full p-4 cursor-pointer bg-white border border-transparent rounded-md shadow-sm hover:bg-sky-300/20  dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700`}
     >
       
      {/* title section  */}
@@ -25,70 +26,9 @@ const Card = ({ note, list = false, addClass=''}) => {
         <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-800 dark:text-white">
           {note.title || "Noteworthy technology acquisitions 2021"}
         </h5>
-        <div>
-          <button
-            id={note.id}
-            data-dropdown-toggle={"dropdown" + note.id}
-            className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-inherit dark:bg-inherit hover:bg-inherit rounded-lg focus:ring-0 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-            type="button"
-          >
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="w-5 aspect-square" viewBox="0 0 24 24" >
-            <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z">
-            </path></svg>
-            {/* <svg
-              className="w-3 aspect-square"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 4 15"
-            >
-              <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
-            </svg> */}
 
-          </button>
-          <div
-            id={"dropdown" + note.id}
-            className="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-xl w-44 dark:bg-gray-700 dark:divide-gray-600"
-          >
-            <ul
-              className="py-2 text-sm text-gray-700 dark:text-gray-200"
-              aria-labelledby={note.id}
-            >
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Dashboard
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Settings
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Earnings
-                </a>
-              </li>
-            </ul>
-            <div className="py-2">
-              <a
-                href="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-              >
-                Separated link
-              </a>
-            </div>
-          </div>
-        </div>
+          <Dropdown/>
+        
       </div>
 
       {/* this is the text */}

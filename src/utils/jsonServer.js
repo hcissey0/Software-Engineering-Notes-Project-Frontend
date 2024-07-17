@@ -2,20 +2,8 @@ import { DOMAIN } from "./global";
 import { getAccessToken } from "./loaders";
 // ! Run json server first on port 3000 (This is the default port anyway)
 // * All sample data in api.json is an actual representation of how data looks like from the actual server
-const urls = []
-// get all notes from json server
-export const getNotes = async (user)=>{
-  const response = await fetch(DOMAIN + '/api/get-notes/', {
-    headers:{
-      'Authorization':'Bearer ' +  getAccessToken()
-    }
-  });
-  const notes = await response.json(); 
-  return user? notes.filter((note)=>note.author == user): notes;  // filter notes for a particular user or return all notes
-};
 
-
-export const fetchData = async(url, {method='GET', body, auth=false, headers={}})=>{
+export const fetchData = async(url, {method='GET', body, auth=false, headers={}, returnResponse=false})=>{
   let options = {
       method:method,
       headers: headers
@@ -25,20 +13,21 @@ export const fetchData = async(url, {method='GET', body, auth=false, headers={}}
     options.headers['Authorization'] = 'Bearer ' + getAccessToken();
   }
 
-  if(method == 'POST'){
+  if(method == 'POST' || method == 'PATCH'){
      options.body = JSON.stringify(body); 
      options.headers['Content-Type'] = 'application/json';
   }
 
   try {
         const response = await fetch(url, options);
+        if(returnResponse)return response; 
         const data = await response.json();
         console.log(data);
         return data;
       } catch (error) {
       console.log(error);
   }
-  return null;
+  return null; // couldn't get the resource
 };
   export const fromServers = async (urls, {method='GET', body, auth=false, headers})=>{
     const options = {method: method, body:body, auth: auth, headers:headers};

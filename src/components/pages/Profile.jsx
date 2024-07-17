@@ -1,6 +1,6 @@
 import React from 'react';
 import './Profile.css'
-import 'boxicons'
+// import 'boxicons'
 
 
 

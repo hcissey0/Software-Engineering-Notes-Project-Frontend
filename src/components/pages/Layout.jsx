@@ -35,7 +35,7 @@ const Layout = ({ children }) => {
                   ></path>
                 </svg>
               </button>
-              <Link to={"/"} className="flex ms-2 md:me-24">
+              <Link to={"/" + localStorage.getItem('username')} className="flex ms-2 md:me-24">
                 <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
                   Notes
                 </span>
@@ -60,7 +60,7 @@ const Layout = ({ children }) => {
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800 flex flex-col justify-between">
           {/* this is the main ul */}
 
-          {isAuthenticated && <ul></ul>}
+          {isAuthenticated() && <ul></ul>}
           {!isAuthenticated() && 
               <ul className="space-y-2 font-medium overflow-y-auto">
               <li>

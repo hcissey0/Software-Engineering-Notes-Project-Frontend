@@ -28,7 +28,20 @@ const Avatar = () => {
   //     console.log(dropdown);
   //   }
   // });
+  const handleClickOutside = (e)=>{
+    console.log(e.target);
+   if(dropdownRef.current && !dropdownRef.current.contains(e.target)){
+     setOpen(false); 
+   }
+ };
+
+ 
+ 
   useEffect(()=>{
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside); //  we have to remove the event listener when the element unmounts
+    };
     getImage();
   }, [])
   return (
@@ -62,13 +75,13 @@ const Avatar = () => {
             className="text-sm text-gray-900 dark:text-white"
             role="none"
           >
-            Neil Sims
+            {localStorage.getItem('username')}
           </p>
           <p
             className="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
             role="none"
           >
-            neil.sims@flowbite.com
+            {localStorage.getItem('email')}
           </p>
         </div>
         <ul className="py-1" role="none">

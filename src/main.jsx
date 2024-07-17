@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
+import '@mantine/tiptap/styles.css'; // is working
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Layout from './components/pages/Layout.jsx'
@@ -20,11 +21,6 @@ const router = createBrowserRouter(
       element:<Layout/>,
       children:[
         {
-          index:true,
-          element:<Home/>,
-          loader:homeLoader
-        }, 
-        {
           path:'/edit', 
           element:<Edit/>, 
           loader:editLoader
@@ -36,6 +32,11 @@ const router = createBrowserRouter(
         {
           path: '/profile',
           element: <Profile/>
+        },
+        {
+          path:'/:username',
+          element:<Home/>,
+          loader:homeLoader
         }
       ]
     }, 
@@ -48,6 +49,10 @@ const router = createBrowserRouter(
       path:'/signup', 
       element:<Signup/>,
       action:signupAction
+    },
+    {
+      path:'/outer-test',
+      element:<App/>
     }
   ]
 );

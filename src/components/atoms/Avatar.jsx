@@ -31,23 +31,23 @@ const Avatar = () => {
   const handleClickOutside = (e)=>{
     console.log(e.target);
    if(dropdownRef.current && !dropdownRef.current.contains(e.target)){
-     setOpen(false); 
+     setHidden(true); 
    }
  };
 
  
  
   useEffect(()=>{
+    getImage();
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside); //  we have to remove the event listener when the element unmounts
     };
-    getImage();
   }, [])
   return (
     <>
     {url &&
-        <div className="flex items-center ms-3 relative">
+        <div ref={dropdownRef} className="flex items-center ms-3 relative">
         <div>
           <button
             type="button"
@@ -64,9 +64,8 @@ const Avatar = () => {
             />
           </button>
         </div>
-        {!hidden && 
-        
-        <div  ref={dropdownRef}
+        {!hidden &&  
+        <div
         className={`z-50 my-4 absolute top-6 ${right} text-base list-none bg-white divide-y divide-gray-100 rounded shadow-2xl dark:bg-gray-700 dark:divide-gray-600`}
         id="dropdown-user"
       >

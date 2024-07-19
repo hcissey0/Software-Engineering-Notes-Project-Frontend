@@ -17,7 +17,7 @@ const PublicRoute = ({ children }) => {
 const App = ()=>{
   return(
     <div className='p-4'>
-        <Dropdown/>
+        
     </div>
   );
 };

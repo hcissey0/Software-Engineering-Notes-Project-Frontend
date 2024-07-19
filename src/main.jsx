@@ -1,8 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import '@mantine/tiptap/styles.css'; // is working
+// import '@mantine/tiptap/styles.css'; // is working
 import './index.css'
+import './github.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Layout from './components/pages/Layout.jsx'
 import Home from './components/pages/Home.jsx'

@@ -108,3 +108,66 @@
    <Link to='' reloadDocument>
 ```
 
+`adjusting scrollbar`
+To reduce the width of scrollbars in HTML, you can use the `scrollbar-width` CSS property. This property allows you to set the thickness of an element's scrollbars. Here are the possible values:
+
+- `auto`: The default scrollbar width for the platform.
+- `thin`: A thinner scrollbar width.
+- `none`: No scrollbar shown, but the element will still be scrollable.
+
+Here's an example of how to use it:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scrollbar Width Example</title>
+  <style>
+    .scrollbar-thin {
+      width: 300px;
+      height: 200px;
+      overflow-y: scroll;
+      scrollbar-width: thin; /* This sets the scrollbar to be thin */
+    }
+  </style>
+</head>
+<body>
+  <div class="scrollbar-thin">
+    <p>Content goes here...</p>
+    <p>More content...</p>
+    <p>Even more content...</p>
+  </div>
+</body>
+</html>
+```
+
+For more customization, you can use the `::-webkit-scrollbar` pseudo-element, which provides more control over the appearance of scrollbars in WebKit-based browsers (like Chrome and Safari):
+
+```css
+/* Custom scrollbar for WebKit browsers */
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: darkgrey; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Rounded corners */
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: lightgrey; /* Color of the scrollbar track */
+}
+```
+
+And apply it to your HTML:
+
+```html
+<div class="scrollbar-custom">
+  <p>Content goes here...</p>
+  <p>More content...</p>
+  <p>Even more content...</p>
+</div>
+```
+

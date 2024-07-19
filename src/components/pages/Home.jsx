@@ -20,7 +20,7 @@ const Home = () => {
           I'm using the home loader to check authentication instead to prevent the page from loading if the user is not authenticated
         */ 
       const func = async ()=>{
-        const notes = await fromServers([DOMAIN + '/api/get-notes/', JSON_DOMAIN + '/get-notes/'], {});
+        const notes = await fromServers([DOMAIN + `/api/get-notes/?username=${localStorage.getItem('get_notes_for')}`, JSON_DOMAIN + '/get-notes/'], {auth:true}); // remove auth for when using json server (json server doesn't accept authorization)
         if(notes!=null)setNotes(notes);
       };
       func();

@@ -9,26 +9,10 @@ export const getAccessToken = ()=>{
 
 const userIsAuthenticated = async()=>{
  const accessToken = getAccessToken();
- if(!accessToken){
-    return false; // if the user has no access token then we return early
- }
-
-
- // a token may exist but may have expired so we check that
- try {
-     const response = await fetch(DOMAIN + '/api/check-token/', {
-        headers: {
-            'Authorization': 'Bearer ' + getAccessToken()
-        }
-     })
-    
-     const data = await response.json();
-     console.log(data);
-     // if token has expired then we return false
-     if(!response.ok)return false;
- } catch (error) {
-    console.log('Main server is probably not running');
- }
+ if(!accessToken)return false; // if the user has no access token then we return early
+ 
+ const response = await fetchData(DOMAIN + '/api/check-token/', {auth:true, returnResponse:true})
+ if(response != null && !response.ok)return false;
  return true; // all checks have passed (shouldn't return true over here but for development we need it so we can work on the page)
 };
 
@@ -43,19 +27,26 @@ export const isAuthenticated = () =>{
 }
 
 // * runs before the homepage loads completely
-export const homeLoader = async () =>{
+export const homeLoader = async ({params}) =>{
+    const username = params.username; 
+    const response = await fetchData(DOMAIN + `/api/check-username/?username=${username}`, {returnResponse:true})
+    if(response != null && !response.ok)return redirect('/test');
+    setAuthentication(false); // assume user is not authenticated yet
     if(!await userIsAuthenticated())return redirect('/login');
-    setAuthentication(true);
+
+    setAuthentication(true); 
+    localStorage.setItem('get_notes_for', username);
     return null;
 }; 
 
 
 export const editLoader = async ({request})=>{
+// setAuthentication(false);
 const url = new URL(request.url); 
-if(url.searchParams.get('add_note'))return {};
+if(url.searchParams.get('add_note'))return null;
 const noteId = url.searchParams.get('note_id'); 
 console.log(noteId);
 
-const note = await fetchData(DOMAIN + '/api/get-notes/'+ noteId, {auth:true}); 
+const note = await fetchData(DOMAIN + `/api/get-notes/`+ noteId, {auth:true}); 
  return note || [];
 };

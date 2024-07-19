@@ -11,3 +11,48 @@
 body {
     font-family: 'poppins';
 }
+
+.m_c2204cc2 .ProseMirror p.is-editor-empty:first-of-type::before {
+    content: attr(data-placeholder);
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    float: left;
+    height: 0;
+    color: var(--mantine-color-placeholder);
+}
+
+.mantine-RichTextEditor-toolbar{
+    @apply flex;
+}
+
+.mantine-RichTextEditor-content a{
+    @apply text-blue-700 hover:underline underline-offset-4 cursor-pointer;
+}
+
+.mantine-RichTextEditor-content ul{
+  list-style-type: disc;
+  @apply ms-6
+}
+.mantine-RichTextEditor-content ol{
+  list-style-type: decimal;
+  @apply ms-6
+}
+
+.mantine-RichTextEditor-content div{
+    @apply outline-0 min-h-24
+}
+
+.mantine-RichTextEditor-linkEditor{
+    @apply absolute right-80 flex items-center shadow-md border-sky-500 gap-2 top-40 bg-white rounded-md p-2;
+}
+
+
+.mantine-RichTextEditor-linkEditorSave{
+    @apply text-white rounded-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium text-sm px-5 py-2.5 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800
+}
+
+.mantine-RichTextEditor-linkEditorInput{
+    @apply bg-gray-50 border-gray-300 relative top-[0.75rem] text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+}

@@ -23,9 +23,9 @@ const Card = ({ note, list = false, addClass=''}) => {
       
      {/* title section  */}
       <div className="flex justify-between">
-        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-800 dark:text-white">
+        <Link to={`/edit/?note_id=${note.id}`} reloadDocument className="mb-2 text-xl font-bold tracking-tight text-gray-800 dark:text-white">
           {note.title || "Noteworthy technology acquisitions 2021"}
-        </h5>
+        </Link>
 
           <Dropdown/>
         

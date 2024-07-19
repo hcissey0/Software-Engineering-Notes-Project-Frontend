@@ -19,6 +19,8 @@ import { IconEye, IconLock, IconPencil } from '@tabler/icons-react';
 import hljs from 'highlight.js';
 import Spinner from '../organisms/Spinner';
 import Underline from '@tiptap/extension-underline';
+import LabelDropdown from '../organisms/LabelDropdown';
+import AccessDropdown from '../organisms/AccessDropdown';
 function Edit() {
   const lowlight = createLowlight();
  
@@ -40,65 +42,69 @@ const codeExample = 'for element in name'
 // const content = '<p>Regular paragraph</p><pre><code>' + highlighted.value + '</code></pre>';
 // console.log(content);
 
+ 
   const note = useLoaderData();
-  const [saving, setSaving] = useState(false)
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(true);
   const [title, setTitle] = useState(note? note.title: 'Untitled');
+  const [noteId, setNoteId] = useState(note != null ? note.id: null);
+  const author = useRef(note != null? note.author: localStorage.getItem('username')); // author does not change
   const [notes, setNotes] = useState([]);
-  const quillRef = useRef();
   const titleRef = useRef();
   const editor = useEditor({
     extensions:[
         StarterKit.configure({codeBlock: false}), 
         Link,
         Underline,
-        CodeBlockLowlight.configure({ lowlight }),
+        // CodeBlockLowlight.configure({ lowlight }),
         Placeholder.configure({placeholder:'Write something ...'})
     ], 
-    content: note? note.content:  '', 
-    editable: note? note.can_edit: true
+    content: note != null ? note.content:  '', 
+    editable: note != null ? note.can_edit: true
   });
 
   useEffect(
     ()=>{
-      localStorage.removeItem('current_note'); // remove existing current id's 
-      if(note !== null && note.id){ // if it's an existing note then we store it's id so that we just update it
-        localStorage.setItem('current_note', note.id);
-      }
+      console.log('running');
       const func = async()=>{
-        if(note == null)localStorage.setItem('get_notes_for', localStorage.getItem('username'))
-        const notes = await fetchData(DOMAIN + `/api/get-notes/?username=${localStorage.getItem('get_notes_for')}`, {auth: true}); 
+        const notes = await fetchData(DOMAIN + `/api/get-notes/?username=${author.current}`, {auth: true}); 
         if(notes!=null)setNotes(notes);
       }
-      func();
+       if(saved){
+         func();
+         setSaved(false);
+      }
     }
-  , []);
+  , [saved]);
 
   const handleSave = async ()=>{
     let data;
     const brief = truncateText(editor.getText()); 
     const note = {
-      'author': localStorage.getItem('username'), 
+      'author': author.current, 
       'title': titleRef.current.innerText || 'Untitled',
       'brief': brief, 
       'label': 'Web Development',
       'content': editor.getHTML()
     }
-    // if this current note has already been saved then we just perform update functions instead
+
     setSaving(true);
-    if(localStorage.getItem('current_note')){
+    if(noteId != null){ // if the noteId is not null it means the note already exists an so we just update it
       console.log('this note already exists');
       console.log(note);
-      data = await fetchData(DOMAIN + `/api/update-note/${localStorage.getItem('current_note')}/` , {method:'PATCH', body: note})
+      data = await fetchData(DOMAIN + `/api/update-note/${noteId}/` , {method:'PATCH', body: note})
       if(data != null){
         console.log(data);
         setSaving(false);
+        setSaved(true)
       }
     }
     else{ // create a new note
       data = await fetchData(DOMAIN + '/api/create-note/', {method:'POST', body:note});
       if(data != null){
-        localStorage.setItem('current_note', data.id)
+        setNoteId(data.id); // set note id to the current note
         setSaving(false);
+        setSaved(true);
       }
     }
   
@@ -106,7 +112,7 @@ const codeExample = 'for element in name'
 
   return (
     <>
-     <div className='edit-container gap-2 items-start'>
+     <div className='edit-container gap-12 items-start'>
       {notes.length == 0 && 
         <div className='p-2 w-1/4 flex flex-col gap-y-2'>
          {placeholderCards(2)} 
@@ -114,7 +120,7 @@ const codeExample = 'for element in name'
       }
 
       {notes.length > 0 && 
-          <div className="p-2 w-1/4 flex flex-col gap-y-2 max-h-[600px] overflow-y-auto" style={{scrollbarWidth: 'thin'}}>
+          <div className="p-2 w-1/4 flex flex-col gap-y-2 h-[600px] overflow-y-auto" style={{scrollbarWidth: 'thin'}}>
             {notes.map((note) => (
               <Card key={note.id} note={note}/>
             ))}
@@ -132,7 +138,7 @@ const codeExample = 'for element in name'
                   <div className='font-bold text-gray-700 me-4'>Title</div>
                 </td>
                 <td>
-                  <div contentEditable={note? note.can_edit: true} ref={titleRef} className='outline-0 font-bold'>{title}</div>
+                  <div contentEditable={note != null? note.can_edit: true} ref={titleRef} className='outline-0 font-bold'>{title}</div>
                 </td>
               </tr>
                 
@@ -141,7 +147,7 @@ const codeExample = 'for element in name'
                  <div className='font-bold text-gray-700'>Author</div>
                 </td>
                 <td>
-                  <Badge rounded color="gray" text={note? note.author: localStorage.getItem('username')} />
+                  <Badge rounded color="gray" text={note != null && note.author != localStorage.getItem('username')? note.author: localStorage.getItem('username') + ' (You)'} />
                 </td>
                 </tr>
                 <tr>
@@ -149,25 +155,29 @@ const codeExample = 'for element in name'
                  <div className='font-bold text-gray-700'>Label</div>
                 </td>
                 <td>
-                  <Badge rounded color="blue" text={note && note.label? note.label : 'empty'} />
+                  {/* <Badge rounded color="blue" text={(note != null && note.label)? note.label : 'empty'} /> */}
+                  <LabelDropdown/>
                 </td>
                 </tr>
              
                 <tr>
                 <td>
-                 <div className='font-bold text-gray-700'>Status</div>
+                 <div className='font-bold text-gray-700'>Access</div>
                 </td>
                 <td>
-                  <div className='inline-flex items-center'>
+                  {/* <div className='inline-flex items-center'>
                   <Badge rounded color="green" text='Private' />
                   <IconLock className='w-5 h-5'/>
-                  </div>
+                  </div> */}
+
+                  <AccessDropdown/>
+
                 </td>
                 </tr>
 
                 <tr>
                 <td>
-                 <div className='font-bold text-gray-700'>Access</div>
+                 <div className='font-bold text-gray-700'>Permission</div>
                 </td>
                 <td>
                   <div className='inline-flex items-center'>

@@ -5,6 +5,7 @@ import './edit.css'
 import { fromServers } from "../../utils/jsonServer";
 import { placeholderCards } from "../organisms/CardSkeleton";
 import { DOMAIN, JSON_DOMAIN } from "../../utils/global";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [status, setStatus] = useState("");
@@ -152,9 +153,14 @@ const Home = () => {
         </div>
       }
 
-      {notes.length == 0 && 
+      {notes == null && 
         <div className="cards w-full">
           {placeholderCards(5)}
+        </div>
+      }
+      {notes.length == 0 && 
+        <div className="w-full">
+          No notes here you can click <Link to={"/edit/?add_note=true"} reloadDocument className="text-blue-700 hover:underline hover:underline-offset-4">here</Link> to create a new note
         </div>
       }
 

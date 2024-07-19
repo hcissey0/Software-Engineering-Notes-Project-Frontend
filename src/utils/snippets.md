@@ -171,3 +171,102 @@ And apply it to your HTML:
 </div>
 ```
 
+`return data from child to parent`
+
+Yes, it's definitely possible to pass the state of a JSX element from a child component to its parent in React. This is typically done by passing a callback function from the parent to the child as a prop. The child component can then call this function to send data back to the parent.
+
+Here's a simple example to illustrate this:
+
+### Parent Component
+
+```javascript
+import React, { useState } from 'react';
+import ChildComponent from './ChildComponent';
+
+function ParentComponent() {
+  const [childData, setChildData] = useState('');
+
+  const handleDataFromChild = (data) => {
+    setChildData(data);
+  };
+
+  return (
+    <div>
+      <h1>Data from Child: {childData}</h1>
+      <ChildComponent onData={handleDataFromChild} />
+    </div>
+  );
+}
+
+export default ParentComponent;
+```
+
+### Child Component
+
+```javascript
+import React, { useState } from 'react';
+
+function ChildComponent({ onData }) {
+  const [inputValue, setInputValue] = useState('');
+
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+    onData(e.target.value); // Pass the data to the parent
+  };
+
+  return (
+    <div>
+      <input type="text" value={inputValue} onChange={handleChange} />
+    </div>
+  );
+}
+
+export default ChildComponent;
+```
+
+### Explanation
+
+1. **Parent Component**:
+   - `handleDataFromChild`: A function that updates the parent's state with data from the child.
+   - `ChildComponent` is rendered with the `onData` prop, which is the `handleDataFromChild` function.
+
+2. **Child Component**:
+   - `handleChange`: A function that updates the child's state and calls the `onData` function passed from the parent, sending the current input value back to the parent.
+
+When you type in the input field in the `ChildComponent`, the `handleChange` function updates the child's state and simultaneously sends the input value to the parent component, which updates its own state accordingly.
+
+
+`checking editor button activity`
+To check if a style like bold is currently active in Mantine Editor, you can use the `isActive` function provided by the editor's API. Here's a general approach:
+
+1. **Access the Editor State**: You need to access the editor state to check the current formatting.
+2. **Check for Active Styles**: Use the `isActive` function to determine if a specific style is active.
+
+Here's an example in JavaScript:
+
+```javascript
+import { useEditor } from '@mantine/editor';
+
+function MyEditorComponent() {
+  const editor = useEditor();
+
+  const isBoldActive = editor.isActive('bold');
+
+  return (
+    <div>
+      <button
+        style={{ fontWeight: isBoldActive ? 'bold' : 'normal' }}
+        onClick={() => editor.chain().focus().toggleBold().run()}
+      >
+        Bold
+      </button>
+      <div id="editor" />
+    </div>
+  );
+}
+```
+
+In this example:
+- `useEditor` initializes the editor.
+- `isActive('bold')` checks if the bold style is currently active.
+- The button's style changes based on whether bold is active.

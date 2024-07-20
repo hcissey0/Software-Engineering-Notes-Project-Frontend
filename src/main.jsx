@@ -13,14 +13,18 @@ import Edit from './components/pages/Edit.jsx'
 import Profile from './components/pages/Profile.jsx'
 import Signup from './components/pages/Signup.jsx'
 import { editLoader, homeLoader } from './utils/loaders.js'
-
+import { indexLoader } from './utils/loaders.js'
 // routes for the application
 const router = createBrowserRouter(
   [
     {
-      path: '/', 
+      path:'/', 
       element:<Layout/>,
       children:[
+        {
+          index:true, 
+          loader: indexLoader
+        },
         {
           path:'/edit', 
           element:<Edit/>, 

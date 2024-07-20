@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import AvatarSkeleton from './AvatarSkeleton';
 import { Link } from "react-router-dom";
 import { signOut } from '../../utils/actions';
+// import {profileImage} from '../../components/pages/Profile';
 
 const Avatar = () => {
   const [url, setUrl] = useState(null); 
@@ -37,9 +38,7 @@ const Avatar = () => {
    }
  };
 
- 
- 
-  useEffect(()=>{
+ useEffect(()=>{
     getImage();
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -60,6 +59,7 @@ const Avatar = () => {
           >
             <span className="sr-only">Open user menu</span>
             <img
+              id="profileImage"
               className="min-w-8 h-8 rounded-full"
               src={url}
               alt="user photo"
@@ -85,6 +85,17 @@ const Avatar = () => {
             {localStorage.getItem('email')}
           </p>
         </div>
+        <ul className="py-1" role="none">
+          <li>
+            <a
+              href="/Profile"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+              role="menuitem"
+            >
+              Go to profile
+            </a>
+          </li>
+        </ul>
         <ul className="py-1" role="none">
           <li onClick={signOut}>
             <a

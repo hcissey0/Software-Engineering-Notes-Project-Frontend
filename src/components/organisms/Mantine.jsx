@@ -6,18 +6,19 @@ import { MantineProvider } from '@mantine/core'
 
 const Mantine = ({editor}) => {
   const size = '24px';
-  const generalClasses = 'hover:bg-gray-200 border rounded-sm cursor-pointer'
-  const LinkIcon = ()=><IconLink className={generalClasses} size={size} />
+  const generalClasses = 'hover:bg-gray-200 border rounded-sm cursor-pointer '
+  const iconActive = 'stroke-blue-700'
+  const LinkIcon = ()=><IconLink className={generalClasses + `${editor.isActive('link') && iconActive}`} size={size} />
   const UnlinkIcon = ()=><IconUnlink className={generalClasses} size={size} />
   const CodeIcon = ()=> <IconCode size={size} className={generalClasses}/>
-  const BoldIcon = ()=> <IconBold size={size} className={generalClasses}/>
-  const ItalicIcon = ()=> <IconItalic size={size} className={generalClasses}/>
-  const StrikethroughIcon = ()=> <IconStrikethrough size={size} className={generalClasses}/>
+  const BoldIcon = ()=> <IconBold size={size} className={generalClasses + `${editor.isActive('bold') && iconActive}`}/>
+  const ItalicIcon = ()=> <IconItalic size={size} className={generalClasses + `${editor.isActive('italic') && iconActive}`}/>
+  const StrikethroughIcon = ()=> <IconStrikethrough size={size} className={generalClasses  + `${editor.isActive('strike') && iconActive}`}/>
   const HightlightIcon = ()=> <IconHighlight size={size} className={generalClasses}/>
-  const UnderlineIcon = ()=> <IconUnderline size={size} className={generalClasses}/>
+  const UnderlineIcon = ()=> <IconUnderline size={size} className={generalClasses + `${editor.isActive('underline') && iconActive}`}/>
   const ClearFormattingIcon = ()=> <IconClearFormatting size={size} className={generalClasses}/>
-  const BulletListIcon = ()=> <IconList size={size} className={generalClasses}/>
-  const NumberedListIcon = ()=> <IconListNumbers size={size} className={generalClasses}/>
+  const BulletListIcon = ()=> <IconList size={size} className={generalClasses + `${editor.isActive('bulletList') && iconActive}`}/>
+  const NumberedListIcon = ()=> <IconListNumbers size={size} className={generalClasses + `${editor.isActive('orderedList') && iconActive}`}/>
   const UndoIcon = ()=> <IconRotate size={size} className={generalClasses}/>
   const RedoIcon = ()=> <IconRotateClockwise size={size} className={generalClasses}/>
 

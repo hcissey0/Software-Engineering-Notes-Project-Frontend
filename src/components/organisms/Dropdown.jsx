@@ -1,5 +1,7 @@
+import { IconTrash, IconLink } from '@tabler/icons-react';
 import React from 'react'
 import { useState, useRef, useEffect } from 'react';
+import LabelDropdown from './LabelDropdown'
 // * You must make a parent component of the dropdown position relative
 const Dropdown = () => {
     const [open, setOpen] = useState(false);
@@ -37,17 +39,13 @@ const Dropdown = () => {
           </button>
           {open &&  <div id="dropdown" className="z-10 bg-white divide-y divide-gray-100 absolute right-3 top-12 rounded-md shadow-lg w-44 dark:bg-gray-700">
         <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-        <li>
-            <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+        <li className='flex items-center px-4 py-2 gap-2 hover:bg-gray-100 dark:hover:bg-gray-600'>
+            <IconLink className='h-5 w-5'/>
+            <a href="#" className="block  dark:hover:text-white">Copy link</a>
         </li>
-        <li>
-            <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-        </li>
-        <li>
-            <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-        </li>
-        <li>
-            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
+        <li className='flex items-center px-4 py-2 gap-2 hover:bg-gray-100 dark:hover:bg-gray-600'>
+            <IconTrash className='h-5 w-5'/>
+            <a href="#" className="block dark:hover:text-white">Delete</a>
         </li>
         </ul>
     </div>

@@ -47,7 +47,7 @@ if(url.searchParams.get('add_note'))return null;
 const noteId = url.searchParams.get('note_id'); 
 console.log(noteId);
 
-const note = await fetchData(DOMAIN + `/api/get-notes/`+ noteId, {auth:true}); 
+const note = await fetchData(DOMAIN + `/api/get-notes/${noteId}/`, {auth:true}); 
 if(note != null)return note;
 return redirect('/test') // meaning a wrong id was specified so we move to an error page
 };

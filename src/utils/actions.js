@@ -36,12 +36,14 @@ export const signupAction = async({request})=>{
     const response = await fetchData(DOMAIN + '/api/validate-signup/', {method:'POST', body: formData, returnResponse:true})
    
     if(response != null){
-        const validationMessage = await response.json();
+        let validationMessage = await response.json();
         if(response.ok){
             return redirect('/login');
         }
-        // console.log(validationMessage);
-        toast.success(validationMessage)
+        validationMessage = JSON.parse(validationMessage); // for some reason it's not converted to json the first time
+        for(const key in validationMessage){
+            toast.error(validationMessage[key][0].message); // the toast is not working on this page
+        }
     }
     
     return redirect('');
@@ -49,9 +51,6 @@ export const signupAction = async({request})=>{
 
 // logs out the user
 export const signOut = () => {
-    // localStorage.removeItem('user_access_token'); // store it in local storage
-    // localStorage.removeItem('user_refresh_token'); // store it in local storage
-    // localStorage.removeItem('username'); // store the username
-    // localStorage.removeItem('email'); // store the username
-    // return redirect('/login');
+    localStorage.clear();
+    return redirect('/login');
   } 

@@ -49,7 +49,7 @@ const codeExample = 'for element in name'
   const [title, setTitle] = useState(note? note.title: 'Untitled');
   const [noteId, setNoteId] = useState(note != null ? note.id: null);
   const author = useRef(note != null? note.author: localStorage.getItem('username')); // author does not change
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState(null);
   const titleRef = useRef();
   const editor = useEditor({
     extensions:[
@@ -68,7 +68,7 @@ const codeExample = 'for element in name'
       // console.log('running');
       const func = async()=>{
         const notes = await fetchData(DOMAIN + `/api/get-notes/?username=${author.current}`, {auth: true}); 
-        if(notes!=null)setNotes(notes);
+        if(notes !=null)setNotes(notes);
       }
        if(saved){
          func();
@@ -113,22 +113,26 @@ const codeExample = 'for element in name'
   return (
     <>
      <div className='edit-container gap-12 items-start'>
-      {notes == null || notes.length == 0 &&
+      {notes == null &&
         <div className='p-2 w-1/4 flex flex-col gap-y-2'>
          {placeholderCards(2)} 
         </div>
       }
 
-      {notes.length > 0 && 
+    {(notes != null && notes.length == 0) && 
+        <div className="p-2 w-1/4">
+          Your notes will appear here
+        </div>
+      }
+
+      {(notes != null && notes.length > 0) && 
           <div className="p-2 w-1/4 flex flex-col gap-y-2 h-[600px] overflow-y-auto" style={{scrollbarWidth: 'thin'}}>
             {notes.map((note) => (
               <Card key={note.id} note={note}/>
             ))}
           </div>
         }
-       {/* <div className="notes p-2">
-        {notes.map((note)=><Card addClass='mb-2' note={note} key={note.id}/>)}
-       </div> */}
+      
      
       <div className='p-4 editor'>
         <table className='table-auto border-separate'>

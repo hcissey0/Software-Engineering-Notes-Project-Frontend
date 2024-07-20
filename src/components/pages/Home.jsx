@@ -5,12 +5,13 @@ import './edit.css'
 import { fromServers } from "../../utils/jsonServer";
 import { placeholderCards } from "../organisms/CardSkeleton";
 import { DOMAIN, JSON_DOMAIN } from "../../utils/global";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [status, setStatus] = useState("");
   const [displayMode, setDisplayMode] = useState("grid");
   const [sortMode, setSortMode] = useState("date");
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState(null);
 
   // get all notes
   useEffect(() => {
@@ -144,7 +145,7 @@ const Home = () => {
         ))}
       </div> */}
 
-      {notes.length > 0 && 
+      {(notes!= null && notes.length > 0) && 
         <div className="cards w-full">
           {notes.map((note) => (
             <Card key={note.id} note={note} list={displayMode === "list"} />
@@ -152,9 +153,14 @@ const Home = () => {
         </div>
       }
 
-      {notes.length == 0 && 
+      {notes == null && 
         <div className="cards w-full">
           {placeholderCards(5)}
+        </div>
+      }
+      {(notes != null && notes.length == 0) && 
+        <div className="w-full">
+          No notes here you can click <Link to={"/edit/?add_note=true"} reloadDocument className="text-blue-700 hover:underline hover:underline-offset-4">here</Link> to create a new note
         </div>
       }
 

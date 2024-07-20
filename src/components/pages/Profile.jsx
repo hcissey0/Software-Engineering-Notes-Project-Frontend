@@ -20,7 +20,7 @@ const Profile = () => {
 
         if (editImageButton && closeButton && imageModal && imageUpload && saveImageButton && profileImage && imagePreview) {
             editImageButton.addEventListener('click', function () {
-                imageModal.style.display = 'block';
+                imageModal.style.display = 'flex';
             });
 
             closeButton.addEventListener('click', function () {
@@ -64,6 +64,7 @@ const Profile = () => {
 
     return (
         <div>
+        
             <div id="imageModal" className="modal">
                 <div className="modal-content">
                     <span className="close-button">&times;</span>
@@ -113,7 +114,6 @@ const Profile = () => {
                                 name="name"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                required
                             />
                             <label htmlFor="email">Email:</label>
                             <input
@@ -122,7 +122,6 @@ const Profile = () => {
                                 name="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                required
                             />
                             <label htmlFor="phone">Phone:</label>
                             <input
@@ -131,16 +130,23 @@ const Profile = () => {
                                 name="phone"
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
-                                required
                             />
-                            <label htmlFor="address">Address:</label>
+                            <label htmlFor="password">Change Password:</label>
                             <input
+                                placeholder='Old Password'
                                 type="text"
-                                id="address"
-                                name="address"
+                                id="old password"
+                                name="password"
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
-                                required
+                            />
+                            <input
+                                placeholder='New Password'
+                                type="text"
+                                id="new password"
+                                name="password"
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
                             />
                             <button type="submit">Save Changes</button>
                         </form>

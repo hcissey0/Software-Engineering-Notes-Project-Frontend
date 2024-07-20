@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import AvatarSkeleton from './AvatarSkeleton';
+import { Link } from "react-router-dom";
+import { signOut } from '../../utils/actions';
 
 const Avatar = () => {
   const [url, setUrl] = useState(null); 
@@ -29,7 +31,7 @@ const Avatar = () => {
   //   }
   // });
   const handleClickOutside = (e)=>{
-    console.log(e.target);
+    // console.log(e.target);
    if(dropdownRef.current && !dropdownRef.current.contains(e.target)){
      setHidden(true); 
    }
@@ -77,41 +79,14 @@ const Avatar = () => {
             {localStorage.getItem('username')}
           </p>
           <p
-            className="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
+            className="text-sm font-bold text-gray-900 truncate dark:text-gray-300"
             role="none"
           >
             {localStorage.getItem('email')}
           </p>
         </div>
         <ul className="py-1" role="none">
-          <li>
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-              role="menuitem"
-            >
-              Dashboard
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-              role="menuitem"
-            >
-              Settings
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-              role="menuitem"
-            >
-              Earnings
-            </a>
-          </li>
-          <li>
+          <li onClick={signOut}>
             <a
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"

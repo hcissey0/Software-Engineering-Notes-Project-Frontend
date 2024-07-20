@@ -54,7 +54,7 @@
 ```javascript
         const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(inputs);
+        // console.log(inputs);
         const form = document.querySelector("form");
         const data = JSON.stringify(inputs);
         const response = await fetch("http://192.168.137.168:8000/api/token/", {
@@ -65,8 +65,8 @@
         },
         });
         const resp_data = await response.json();
-        console.log(resp_data);
-        console.log(response.statusText, response.status);
+        // console.log(resp_data);
+        // console.log(response.statusText, response.status);
 
         if (response.status === 200) {
         const access = resp_data.access;

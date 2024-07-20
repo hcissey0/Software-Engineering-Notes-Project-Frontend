@@ -65,7 +65,7 @@ const codeExample = 'for element in name'
 
   useEffect(
     ()=>{
-      console.log('running');
+      // console.log('running');
       const func = async()=>{
         const notes = await fetchData(DOMAIN + `/api/get-notes/?username=${author.current}`, {auth: true}); 
         if(notes!=null)setNotes(notes);
@@ -90,8 +90,8 @@ const codeExample = 'for element in name'
 
     setSaving(true);
     if(noteId != null){ // if the noteId is not null it means the note already exists an so we just update it
-      console.log('this note already exists');
-      console.log(note);
+      // console.log('this note already exists');
+      // console.log(note);
       data = await fetchData(DOMAIN + `/api/update-note/${noteId}/` , {method:'PATCH', body: note})
       if(data != null){
         console.log(data);
@@ -113,7 +113,7 @@ const codeExample = 'for element in name'
   return (
     <>
      <div className='edit-container gap-12 items-start'>
-      {notes.length == 0 && 
+      {notes == null || notes.length == 0 &&
         <div className='p-2 w-1/4 flex flex-col gap-y-2'>
          {placeholderCards(2)} 
         </div>

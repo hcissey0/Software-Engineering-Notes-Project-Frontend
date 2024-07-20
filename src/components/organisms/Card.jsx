@@ -27,7 +27,7 @@ const Card = ({ note, list = false, addClass=''}) => {
           {note.title || "Noteworthy technology acquisitions 2021"}
         </Link>
 
-          <Dropdown/>
+          <Dropdown link={note.id}/>
         
       </div>
 

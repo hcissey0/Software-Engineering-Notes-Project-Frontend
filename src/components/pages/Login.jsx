@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Form, Link } from "react-router-dom";
 import "../../App.css";
 import ThemeToggle from "../atoms/ThemeToggle";
+import toast, { Toaster } from 'react-hot-toast';
+
 
 const Login = () => {
   // let navigate = useNavigate();
@@ -16,6 +18,7 @@ const Login = () => {
   
   return (
     <div className="w-screen h-screen flex items-center justify-center">
+      <Toaster />
       <div className="absolute top-5 right-5">
         <ThemeToggle />
       </div>
@@ -67,7 +70,6 @@ const Login = () => {
               type="checkbox"
               value=""
               className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-              required
             />
           </div>
           <label

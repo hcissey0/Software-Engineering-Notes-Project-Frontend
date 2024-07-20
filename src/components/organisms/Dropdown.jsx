@@ -2,19 +2,25 @@ import { IconTrash, IconLink } from '@tabler/icons-react';
 import React from 'react'
 import { useState, useRef, useEffect } from 'react';
 import LabelDropdown from './LabelDropdown'
+import { DOMAIN, FRONTEND_DOMAIN } from '../../utils/global';
+import toast, { Toaster } from 'react-hot-toast';
 // * You must make a parent component of the dropdown position relative
-const Dropdown = () => {
+const Dropdown = ({ link }) => {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef();
   
     const handleClickOutside = (e)=>{
-       console.log(e.target);
+      //  console.log(e.target);
       if(dropdownRef.current && !dropdownRef.current.contains(e.target)){
         setOpen(false); 
       }
     };
 
-    
+    const copyLink = (noteId) => {
+      navigator.clipboard.writeText(`${FRONTEND_DOMAIN}/edit/?note_id=${noteId}/`);
+      toast.success("Link copied to clipboard");
+      // console.log("link copied to clipboard")
+    }
   
    useEffect(()=>{
     document.addEventListener('mousedown', handleClickOutside);
@@ -25,6 +31,7 @@ const Dropdown = () => {
 
   return (
     <>   
+        <Toaster/> 
         <div ref={dropdownRef}>
           <button
             // id={note.id}
@@ -41,7 +48,7 @@ const Dropdown = () => {
         <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
         <li className='flex items-center px-4 py-2 gap-2 hover:bg-gray-100 dark:hover:bg-gray-600'>
             <IconLink className='h-5 w-5'/>
-            <a href="#" className="block  dark:hover:text-white">Copy link</a>
+            <a href="#" onClick={() => copyLink(link)} className="block  dark:hover:text-white">Copy link</a>
         </li>
         <li className='flex items-center px-4 py-2 gap-2 hover:bg-gray-100 dark:hover:bg-gray-600'>
             <IconTrash className='h-5 w-5'/>

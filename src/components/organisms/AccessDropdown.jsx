@@ -17,7 +17,7 @@ const AccessDropdown = () => {
   };
 
   const handleClickOutside = (e)=>{
-    console.log(e.target);
+    // console.log(e.target);
    if(dropdownRef.current && !dropdownRef.current.contains(e.target)){
      setOpen(false); 
    }

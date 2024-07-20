@@ -1,6 +1,8 @@
 import { redirect } from "react-router-dom";
 import { DOMAIN } from "./global";
 import {fetchData} from "./jsonServer"
+import toast, { Toaster } from 'react-hot-toast';
+
 // * processes the login data
 export const loginAction = async({request}) =>{
     const formData = Object.fromEntries(await request.formData()); // converting the form data into an object
@@ -16,7 +18,11 @@ export const loginAction = async({request}) =>{
             localStorage.setItem('user_refresh_token', refreshToken); // store it in local storage
             localStorage.setItem('username',data.user.username); // store the username
             localStorage.setItem('email',data.user.email); // store the username
+            toast.success('Login successful!'); // show an error message if the user does not exist
             return redirect('/' + data.user.username);
+        }
+        else {
+            toast.error('Invalid username or password'); // show an error message if the user does not exist
         }
     }
     // handle the case for when the user does not exist
@@ -34,8 +40,18 @@ export const signupAction = async({request})=>{
         if(response.ok){
             return redirect('/login');
         }
-        console.log(validationMessage);
+        // console.log(validationMessage);
+        toast.success(validationMessage)
     }
     
     return redirect('');
 };
+
+// logs out the user
+export const signOut = () => {
+    // localStorage.removeItem('user_access_token'); // store it in local storage
+    // localStorage.removeItem('user_refresh_token'); // store it in local storage
+    // localStorage.removeItem('username'); // store the username
+    // localStorage.removeItem('email'); // store the username
+    // return redirect('/login');
+  } 

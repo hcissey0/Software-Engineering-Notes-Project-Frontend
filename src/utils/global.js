@@ -1,5 +1,6 @@
-export const DOMAIN = 'https://software-engineering-notes-project-backend.vercel.app'; // actual backend domain
+export const DOMAIN = 'http://localhost:8000'; // actual backend domain
 export const JSON_DOMAIN = 'Http://localhost:3000'; // json server domain
+export const FRONTEND_DOMAIN = 'http://localhost:5173'; // frontend domain
 
 export const truncateText = (text) => {
     const words = text.split(' '); // an array of all words

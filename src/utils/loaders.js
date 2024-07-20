@@ -26,6 +26,11 @@ export const isAuthenticated = () =>{
     return localStorage.getItem('is_authenticated');
 }
 
+export const indexLoader = async ()=>{
+    if(!await userIsAuthenticated())return redirect('/login');
+    return redirect('/' + localStorage.getItem('username'));
+};
+
 // * runs before the homepage loads completely
 export const homeLoader = async ({params}) =>{
     const username = params.username; 

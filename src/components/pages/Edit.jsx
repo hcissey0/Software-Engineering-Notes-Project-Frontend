@@ -51,6 +51,9 @@ function Edit() {
   ); // author does not change
   const [notes, setNotes] = useState([]);
   const titleRef = useRef();
+  
+
+  console.log('new label value is', label);
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: false }),
@@ -67,7 +70,6 @@ function Edit() {
   let originalContent = editor.getHTML();
 
   useEffect(() => {
-    // console.log('running');
     const func = async () => {
       const notes = await fetchData(
         DOMAIN + `/api/get-notes/?username=${author.current}`,
@@ -111,18 +113,24 @@ function Edit() {
         }
       });
   }, []);
-
+// ! above useEffect will get sanitized soon
+  
+  const handleLabelChange = (label)=>{
+    setLabel(label);
+  }
   const handleSave = async () => {
+    console.log('This is the label before updating', label);
     let data;
     const brief = truncateText(editor.getText());
     const note = {
       author: author.current,
       title: titleRef.current.innerText || "Untitled",
       brief: brief,
-      label: "Web Development",
+      label: label.title != 'empty'? {...label, labelId:label.id}:null,
       content: editor.getHTML(),
     };
-
+     console.log('this is the note before updating', note); 
+     
     setSaving(true);
     if (noteId != null) {
       // if the noteId is not null it means the note already exists an so we just update it
@@ -137,7 +145,7 @@ function Edit() {
         setSaving(false);
         setSaved(true);
         setIsEdited(false);
-        localStorage.removeItem("isEdited");
+        localStorage.removeItem("isEdited"); // ! usually dangerous to put the state of objects in localStorage it might remain there without getting removed
       }
     } else {
       // create a new note
@@ -228,8 +236,7 @@ function Edit() {
                   </div>
                 </td>
                 <td>
-                  {/* <Badge rounded color="blue" text={(note != null && note.label)? note.label : 'empty'} /> */}
-                  <LabelDropdown />
+                  <LabelDropdown label={label} onChange={handleLabelChange}/>
                 </td>
               </tr>
 
@@ -245,7 +252,7 @@ function Edit() {
                   <IconLock className='w-5 h-5'/>
                   </div> */}
 
-                  <AccessDropdown />
+                  <AccessDropdown note={note}/>
                 </td>
               </tr>
 
@@ -276,7 +283,7 @@ function Edit() {
             </tbody>
           </table>
           <div className={`${saving ? "opacity-1" : "opacity-0"}`}>
-            <Spinner />
+            <Spinner text="Saving ..." />
           </div>
           {/* <div className="mb-3 px-2">
             <div className='flex gap-3 items-center'>
@@ -304,8 +311,6 @@ function Edit() {
         </div>
       </div>
 
-      {/* <button className="button bg-sky-500 p-1 rounded-md hover:bg-sky-700" onClick={createNote}>Save</button>
-       <button className="button mx-2 bg-sky-500 p-1 rounded-md hover:bg-sky-700" onClick={getCredentials}>login</button> */}
     </>
   );
 }

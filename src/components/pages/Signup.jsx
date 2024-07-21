@@ -3,7 +3,7 @@ import "../../App.css";
 import ThemeToggle from "../atoms/ThemeToggle";
 import Result from "postcss/lib/result";
 import { useNavigate, Form, Link} from "react-router-dom";
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 
 const Signup = () => {
   return (

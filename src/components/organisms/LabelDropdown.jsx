@@ -9,6 +9,8 @@ import DropdownSkeleton from './DropdownSkeleton';
 
 const LabelDropdown = ({label, onChange}) => {
   const defaultLabel = {title: 'empty', color:'blue'}
+  const colors = ['blue', 'orange', 'green', 'pink', 'indigo', 'purple', 'gray'];
+  const [color, setColor] = useState(getRandomColor())
   const defaultLabels = useRef(null);
   const [open, setOpen] = useState(false);
   const [chosen, setChosen] = useState(label || defaultLabel);
@@ -16,6 +18,11 @@ const LabelDropdown = ({label, onChange}) => {
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef();
   const labelSearchRef = useRef();
+
+  function getRandomColor(){
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    return colors[randomIndex];
+}
 
   const filterLabels = (name)=>{
     // console.log(name);
@@ -60,6 +67,7 @@ const LabelDropdown = ({label, onChange}) => {
 
  useEffect(()=>{
   onChange(chosen)
+  setColor(getRandomColor())
  }, [chosen])
 
  useEffect(()=>{
@@ -106,10 +114,10 @@ useEffect(()=>{
 
             {labels.length == 0 && 
               <>
-                   <li className='mb-2 hover:bg-gray-100 cursor-pointer p-1' onClick={()=>{createLabel({title:labelSearchRef.current.value, color:'blue'})}}>
+                   <li className='mb-2 hover:bg-gray-100 cursor-pointer p-1' onClick={()=>{createLabel({title:labelSearchRef.current.value, color:color})}}>
                       <div className='flex gap-2 justify-center'>
                          <div>Create</div>
-                          <Badge rounded text={labelSearchRef.current.value} color='green'/>
+                          <Badge rounded text={labelSearchRef.current.value} color={color}/>
                       </div>
                          {/* {chosen.name == label.name && 
                          

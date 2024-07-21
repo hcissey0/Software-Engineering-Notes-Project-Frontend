@@ -39,9 +39,9 @@ function Edit() {
   const note = useLoaderData();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(true);
-  const [title, setTitle] = useState(note ? note.title : "Untitled");
-  const [noteId, setNoteId] = useState(note != null ? note.id : null);
-  const author = useRef(note != null ? note.author : localStorage.getItem("username")); // author does not change
+  const [title, setTitle] = useState(note? note.title: 'Untitled');
+  const [noteId, setNoteId] = useState(note != null ? note.id: null);
+  const author = useRef(note != null? note.author: localStorage.getItem('username')); // author does not change
   const [notes, setNotes] = useState([]);
   const titleRef = useRef();
   const editor = useEditor({
@@ -69,7 +69,6 @@ function Edit() {
       func();
       setSaved(false);
     }
-
   }, [saved]);
   
   useEffect(() => {
@@ -136,24 +135,35 @@ function Edit() {
 
   return (
     <>
-      <div className="edit-container gap-12 items-start">
-        {notes == null || (notes.length == 0 && <div className="p-2 w-1/4 flex flex-col gap-y-2">{placeholderCards(2)}</div>)}
 
-        {notes.length > 0 && (
-          <div className="p-2 w-1/4 flex flex-col gap-y-2 h-[600px] overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
+     <div className='edit-container gap-12 items-start'>
+      {notes == null &&
+        <div className='p-2 w-1/4 flex flex-col gap-y-2'>
+         {placeholderCards(2)} 
+        </div>
+      }
+
+    {(notes != null && notes.length == 0) && 
+        <div className="p-2 w-1/4">
+          Your notes will appear here
+        </div>
+      }
+
+      {(notes != null && notes.length > 0) && 
+          <div className="p-2 w-1/4 flex flex-col gap-y-2 h-[600px] overflow-y-auto" style={{scrollbarWidth: 'thin'}}>
             {notes.map((note) => (
               <Card key={note.id} note={note} />
             ))}
           </div>
-        )}
-        {/* <div className="notes p-2">
-        {notes.map((note)=><Card addClass='mb-2' note={note} key={note.id}/>)}
-       </div> */}
 
-        <div className="p-4 editor">
-          <table className="table-auto border-separate">
-            <tbody>
-              <tr>
+        }
+      
+     
+      <div className='p-4 editor'>
+        <table className='table-auto border-separate'>
+             <tbody>
+                <tr>
+          
                 <td>
                   <div className="font-bold text-gray-700 me-4">Title</div>
                 </td>

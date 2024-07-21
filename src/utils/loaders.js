@@ -1,6 +1,7 @@
 import { redirect } from "react-router-dom";
 import { DOMAIN } from "./global";
 import { fetchData } from "./jsonServer";
+import { lazy } from "react";
 
 export const getAccessToken = ()=>{
     return localStorage.getItem('user_access_token'); 

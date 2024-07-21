@@ -39,11 +39,15 @@ function Edit() {
   const note = useLoaderData();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(true);
-  const [title, setTitle] = useState(note? note.title: 'Untitled');
+  const [title, setTitle] = useState(note != null? note.title: 'Untitled');
+  const [label, setLabel] = useState(note != null? note.label: null)
   const [noteId, setNoteId] = useState(note != null ? note.id: null);
   const author = useRef(note != null? note.author: localStorage.getItem('username')); // author does not change
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState(null);
   const titleRef = useRef();
+  
+
+  console.log('new label value is', label);
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: false }),
@@ -71,6 +75,7 @@ function Edit() {
     }
   }, [saved]);
   
+  // ! Probably a better way to do this useEffect below (Probably using an onChange event on the main editor object)
   useEffect(() => {
     document.querySelector(".m_4574a3c4.mantine-RichTextEditor-toolbar").childNodes.forEach((btn) => {
       btn.addEventListener("click", function () {
@@ -97,30 +102,38 @@ function Edit() {
       }
     });
   }, []);
-
+// ! above useEffect will get sanitized soon
+  
+  const handleLabelChange = (label)=>{
+    setLabel(label);
+  }
   const handleSave = async () => {
+    console.log('This is the label before updating', label);
     let data;
     const brief = truncateText(editor.getText());
     const note = {
       author: author.current,
       title: titleRef.current.innerText || "Untitled",
       brief: brief,
-      label: "Web Development",
+      label: label.title != 'empty'? {...label, labelId:label.id}:null,
       content: editor.getHTML(),
     };
-
+     console.log('this is the note before updating', note); 
+     
     setSaving(true);
     if (noteId != null) {
       // if the noteId is not null it means the note already exists an so we just update it
       // console.log('this note already exists');
       // console.log(note);
+      // data = await fetchData(DOMAIN + `/api/test/`, { method: "POST", body: note });
+      // return;
       data = await fetchData(DOMAIN + `/api/update-note/${noteId}/`, { method: "PATCH", body: note });
       if (data != null) {
         console.log(data);
         setSaving(false);
         setSaved(true);
         setIsEdited(false);
-        localStorage.removeItem("isEdited");
+        localStorage.removeItem("isEdited"); // ! usually dangerous to put the state of objects in localStorage it might remain there without getting removed
       }
     } else {
       // create a new note
@@ -171,7 +184,9 @@ function Edit() {
                   <div contentEditable={note != null ? note.can_edit : true} ref={titleRef} className="outline-0 font-bold">
                     {title}
                   </div>
-                  {isEdited && <p className="text-sm">(Unsaved changes)</p>}
+                  {isEdited && <p className="text-sm">(Unsaved changes)</p>
+                   // * will probably use a star icon here (maybe positioned absolutely but relative to the title div) 
+                  }
                 </td>
               </tr>
 
@@ -192,8 +207,7 @@ function Edit() {
                   <div className="font-bold text-gray-700">Label</div>
                 </td>
                 <td>
-                  {/* <Badge rounded color="blue" text={(note != null && note.label)? note.label : 'empty'} /> */}
-                  <LabelDropdown />
+                  <LabelDropdown label={label} onChange={handleLabelChange}/>
                 </td>
               </tr>
 
@@ -202,11 +216,6 @@ function Edit() {
                   <div className="font-bold text-gray-700">Access</div>
                 </td>
                 <td>
-                  {/* <div className='inline-flex items-center'>
-                  <Badge rounded color="green" text='Private' />
-                  <IconLock className='w-5 h-5'/>
-                  </div> */}
-
                   <AccessDropdown />
                 </td>
               </tr>
@@ -236,19 +245,8 @@ function Edit() {
             </tbody>
           </table>
           <div className={`${saving ? "opacity-1" : "opacity-0"}`}>
-            <Spinner />
+            <Spinner text="Saving ..." />
           </div>
-          {/* <div className="mb-3 px-2">
-            <div className='flex gap-3 items-center'>
-              <div className='font-bold text-gray-700'>Title</div>
-              <div contentEditable ref={titleRef} className='outline-0 font-bold'>{title}</div>
-            </div>
-            
-            <div className='flex gap-3 items-center'>
-              <div className='font-bold text-gray-700'>Label</div>
-              <Badge rounded color="blue" text={note.label ?? 'empty'} />
-            </div>
-        </div> */}
           <Mantine editor={editor} />
           {(note == null || note.can_edit) && (
             <div>
@@ -263,8 +261,6 @@ function Edit() {
         </div>
       </div>
 
-      {/* <button className="button bg-sky-500 p-1 rounded-md hover:bg-sky-700" onClick={createNote}>Save</button>
-       <button className="button mx-2 bg-sky-500 p-1 rounded-md hover:bg-sky-700" onClick={getCredentials}>login</button> */}
     </>
   );
 }

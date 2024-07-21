@@ -9,7 +9,7 @@ import Dropdown from "./Dropdown";
 
 
 const Card = ({ note, list = false, addClass=''}) => {
-
+  console.log(note);
   const truncatedText = truncateText(note.brief);
   // // Call the function to truncate text to 30 words
   // truncateText('text-container', 30);
@@ -69,7 +69,7 @@ const Card = ({ note, list = false, addClass=''}) => {
           {
             // if there's no label then we don't show the badge
           note.label && <div>
-          <Badge rounded color="blue" text={note.label} />
+          <Badge rounded color="blue" text={note.label.title} />
           </div>
           }
         

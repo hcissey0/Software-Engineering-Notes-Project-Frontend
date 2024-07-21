@@ -69,7 +69,7 @@ const Card = ({ note, list = false, addClass=''}) => {
           {
             // if there's no label then we don't show the badge
           note.label && <div>
-          <Badge rounded color="blue" text={note.label.title} />
+          <Badge rounded color={note.label.color} text={note.label.title} />
           </div>
           }
         

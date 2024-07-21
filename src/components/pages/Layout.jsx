@@ -6,12 +6,11 @@ import { Link, Outlet } from "react-router-dom";
 import { isAuthenticated } from "../../utils/loaders";
 import Avatar from "../atoms/Avatar";
 import { ErrorBoundary } from "../../ErrorBoundary";
+import ErrorPage from "./Error";
 // eslint-disable-next-line react/prop-types
 const Layout = ({ children }) => {
   return (
-    <ErrorBoundary
-      fallback={<p className="text-3xl text-black">Something bad occured</p>}
-    >
+    <ErrorBoundary fallback={<ErrorPage />}>
       <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between gap-4">

@@ -97,14 +97,13 @@ const Avatar = () => {
           </li>
         </ul>
         <ul className="py-1" role="none">
-          <li onClick={signOut}>
-            <a
-              href="#"
+          <li onClick={signOut} className='cursor-pointer'>
+            <p
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
               role="menuitem"
             >
               Sign out
-            </a>
+            </p>
           </li>
         </ul>
       </div>}

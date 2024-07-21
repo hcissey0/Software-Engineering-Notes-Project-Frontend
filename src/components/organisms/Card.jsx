@@ -13,6 +13,16 @@ const Card = ({ note, list = false, addClass=''}) => {
   const truncatedText = truncateText(note.brief);
   // // Call the function to truncate text to 30 words
   // truncateText('text-container', 30);
+
+  function checkUnsaved (event) {
+    if (window.location.href.includes('edit/?note_id')) {
+      if (localStorage.getItem('isEdited')) {
+        if (!confirm("You have unsaved changes. Proceed?")) event.preventDefault();
+        else localStorage.removeItem('isEdited');
+      }
+    }
+  }
+
   return (
     // The div below is the whole card
     <div
@@ -23,7 +33,7 @@ const Card = ({ note, list = false, addClass=''}) => {
       
      {/* title section  */}
       <div className="flex justify-between">
-        <Link to={`/edit/?note_id=${note.id}`} reloadDocument className="mb-2 text-xl font-bold tracking-tight text-gray-800 dark:text-white">
+        <Link to={`/edit/?note_id=${note.id}`} onClick={checkUnsaved} reloadDocument className="mb-2 text-xl font-bold tracking-tight text-gray-800 dark:text-white">
           {note.title || "Noteworthy technology acquisitions 2021"}
         </Link>
 
@@ -33,7 +43,7 @@ const Card = ({ note, list = false, addClass=''}) => {
 
       {/* this is the text */}
       <div className="text-container" id="text-container">
-        <Link to={`/edit/?note_id=${note.id}`} reloadDocument className="font-normal text-sm text-gray-700 dark:text-gray-400">
+        <Link to={`/edit/?note_id=${note.id}`} onClick={checkUnsaved} reloadDocument className="font-normal text-sm text-gray-700 dark:text-gray-400">
         {/* {note.text |
           "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order."} */}
           {truncatedText + '... '}

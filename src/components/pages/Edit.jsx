@@ -60,10 +60,13 @@ function Edit() {
   let originalContent = editor.getHTML();
 
   useEffect(() => {
-    // console.log('running');
     const func = async () => {
       const notes = await fetchData(DOMAIN + `/api/get-notes/?username=${author.current}`, { auth: true });
-      if (notes != null) setNotes(notes);
+      if (notes != null)
+        if (localStorage.getItem('username') != localStorage.getItem('get_notes_for'))
+          setNotes(notes.filter(note => !(note.private)));
+        else
+          setNotes(notes);
     };
     if (saved) {
       func();
@@ -207,7 +210,7 @@ function Edit() {
                   <IconLock className='w-5 h-5'/>
                   </div> */}
 
-                  <AccessDropdown />
+                  <AccessDropdown note={note}/>
                 </td>
               </tr>
 

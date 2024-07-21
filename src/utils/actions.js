@@ -60,5 +60,5 @@ export const signOut = () => {
   localStorage.removeItem("user_refresh_token"); // store it in local storage
   localStorage.removeItem("username"); // store the username
   localStorage.removeItem("email"); // store the username
-  return redirect("/login");
+  window.location.href = "/login";
 };

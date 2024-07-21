@@ -1,20 +1,33 @@
-import { useEffect, useState } from "react";
-import API from "../../utils/api";
-import Card from "../organisms/Card";
 import React from "react";
+import { useEffect, useState } from "react";
+import Card from "../organisms/Card";
+import './edit.css'
+import { fromServers } from "../../utils/jsonServer";
+import { placeholderCards } from "../organisms/CardSkeleton";
+import { DOMAIN, JSON_DOMAIN } from "../../utils/global";
+import { Link } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
+
 
 const Home = () => {
   const [status, setStatus] = useState("");
   const [displayMode, setDisplayMode] = useState("grid");
   const [sortMode, setSortMode] = useState("date");
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState(null);
 
+  // get all notes
   useEffect(() => {
-    async function func() {
-      const notes = await API.getNotes();
-      setNotes(notes);
-    }
-    func();
+        /*
+          I could have got the notes in the home loader but I want the card skeletons to show to represent no data
+          The home loader will completely fetch all data before the page loads which is not desirable to us at this moment
+          I'm using the home loader to check authentication instead to prevent the page from loading if the user is not authenticated
+        */ 
+      const func = async ()=>{
+        const usernotes = await fromServers([DOMAIN + `/api/get-notes/?username=${localStorage.getItem('get_notes_for')}`, JSON_DOMAIN + '/get-notes/'], {auth:true}); // remove auth for when using json server (json server doesn't accept authorization)
+        if(usernotes!=null)setNotes(usernotes);
+      };
+      func();
+    
   }, []);
 
   const handleDisplayMode = (e) => {
@@ -30,7 +43,10 @@ const Home = () => {
 
   return (
     <div className="flex flex-col gap-4 justify-center items-center p-4">
-      <div className="borde w-full flex justify-between items-center">
+      
+      {/* * sorting  */}
+
+      {/* <div className="borde w-full flex justify-between items-center">
         <div className="flex items-center gap-2">
           <p className="text-black opacity-40 dark:text-white">Sort by:</p>
           <form className="max-w-sm w-20">
@@ -117,8 +133,11 @@ const Home = () => {
             </li>
           </ul>
         </div>
-      </div>
-      <div
+      </div> */}
+
+      {/* Displaying cards  */}
+
+      {/* <div
         className={`transition-all duration-300 flex w-full justify-center items-center ${
           displayMode === "list" ? "flex-col" : "flex-wrap"
         } gap-2`}
@@ -126,7 +145,29 @@ const Home = () => {
         {notes.map((note) => (
           <Card key={note.id} note={note} list={displayMode === "list"} />
         ))}
-      </div>
+      </div> */}
+      <Toaster />
+
+
+      {(notes!= null && notes.length > 0) && 
+        <div className="cards w-full">
+          {notes.map((note) => (
+            <Card key={note.id} note={note} list={displayMode === "list"} />
+          ))}
+        </div>
+      }
+
+      {notes == null && 
+        <div className="cards w-full">
+          {placeholderCards(5)}
+        </div>
+      }
+      {(notes != null && notes.length == 0) && 
+        <div className="w-full">
+          No notes here you can click <Link to={"/edit/?add_note=true"} reloadDocument className="text-blue-700 hover:underline hover:underline-offset-4">here</Link> to create a new note
+        </div>
+      }
+
     </div>
   );
 };

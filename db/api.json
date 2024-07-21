@@ -1,0 +1,59 @@
+{
+    "get-notes":[
+      {
+        "id": "f955aedb-d9b1-47de-95a5-eb128fdb154e",
+        "author": "bmwodoame",
+        "label": null,
+        "title": "Random Note",
+        "brief": "Lorem ipsum, dolor",
+        "content": "<p> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus unde aspernatur at necessitatibus tenetur ea ex nisi. Accusamus aspernatur ea architecto rem ipsam, natus quam dolores doloremque sequi quae consectetur.</p>",
+        "created": "2024-07-15T11:35:29.643240Z",
+        "modified": "2024-07-15T11:35:29.879874Z",
+        "can_edit": false
+      },
+      {
+        "id": "31228c29-475e-43d9-975c-42e33bc3c085",
+        "author": "bmwodoame",
+        "label": null,
+        "title": "New note",
+        "brief": "new note",
+        "content": "<p>new note</p>",
+        "created": "2024-07-15T11:51:53.888485Z",
+        "modified": "2024-07-15T11:51:53.892483Z",
+        "can_edit": false
+      },
+      {
+        "id": "7b18bf5a-8e3e-4d39-ad71-989db0710e11",
+        "author": "bmwodoame",
+        "label": null,
+        "title": "grocery list",
+        "brief": "These are some list",
+        "content": "<p>These are some list items</p><ol><li>New Item</li><li>Second Item</li><li>Third Item</li><li>Fourth Item </li><li>Fifth Item</li><li>Sixth</li></ol><p><br></p><p>This is <strong>bolden follow </strong><a href=\"https://github.com/wodoame\" rel=\"noopener noreferrer\" target=\"_blank\">my github</a></p><blockquote>Only a fool does not PEPLA</blockquote>",
+        "created": "2024-07-15T12:02:19.961686Z",
+        "modified": "2024-07-15T12:02:20.009787Z",
+        "can_edit": false
+      },
+      {
+        "id": "221afed1-19dd-47bc-ad7e-d8f51f6767de",
+        "author": "fredpekyi",
+        "label": null,
+        "title": "Fred Pekyi",
+        "brief": "My name is fred",
+        "content": "<p>My name is <strong>fred</strong></p>",
+        "created": "2024-07-15T12:33:28.270037Z",
+        "modified": "2024-07-15T12:33:28.327400Z",
+        "can_edit": false
+      },
+      {
+        "id": "af135f7f-4b64-4aad-a489-27179a76c931",
+        "author": "bmwodoame",
+        "label": null,
+        "title": "Untitled",
+        "brief": "This is a quote\nThis",
+        "content": "<blockquote>This is a quote</blockquote><p>This is a link: <a href=\"sample link\" rel=\"noopener noreferrer\" target=\"_blank\">sample link</a></p>",
+        "created": "2024-07-14T23:39:02.173499Z",
+        "modified": "2024-07-14T23:39:02.224304Z",
+        "can_edit": false
+      }
+    ]
+}

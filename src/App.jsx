@@ -1,11 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import "./App.css";
-import Login from "./components/pages/Login";
-import Home from "./components/pages/Home";
-import API from "./utils/api";
-import Layout from "./components/pages/Layout";
-import Edit from "./components/pages/Edit";
-
+import Mantine from "./components/organisms/Mantine";
+import { MantineProvider } from "@mantine/core";
+import Dropdown from "./components/organisms/Dropdown";
 const PrivateRoute = ({ children }) => {
   const user = "e"; // to be implemented
   if (!user) return <Navigate to={"/login"} />;
@@ -18,43 +14,12 @@ const PublicRoute = ({ children }) => {
   return <>{children}</>;
 };
 
-function App() {
-  return (
-    <>
-      <Routes>
-        <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          }
-        />
-
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <Layout>
-                <Home />
-              </Layout>
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/edit"
-          element={
-            <PrivateRoute>
-              <Layout>
-                <Edit />
-              </Layout>
-            </PrivateRoute>
-          }
-        />
-      </Routes>
-    </>
+const App = ()=>{
+  return(
+    <div className='p-4'>
+        
+    </div>
   );
-}
+};
 
 export default App;

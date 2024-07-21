@@ -9,7 +9,7 @@ export default {
     extend: {},
   },
   plugins: [
-    require('flowbite/plugin'),
+    require('flowbite/plugin'), // this is a possible cause for why styles are rendered on the page without having to rebuild the css for tailwind
   ],
   darkMode: 'class',
 }

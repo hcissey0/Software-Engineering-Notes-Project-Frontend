@@ -163,7 +163,9 @@ function Edit() {
         )}
 
         {notes != null && notes.length == 0 && (
-          <div className="p-2 w-1/4">Your notes will appear here</div>
+          <div className="p-2 w-1/4 dark:text-white">
+            Your notes will appear here
+          </div>
         )}
 
         {notes != null && notes.length > 0 && (
@@ -182,23 +184,29 @@ function Edit() {
             <tbody>
               <tr>
                 <td>
-                  <div className="font-bold text-gray-700 me-4">Title</div>
+                  <div className="font-bold text-gray-700 dark:text-gray-400 me-4">
+                    Title
+                  </div>
                 </td>
                 <td className="flex gap-3">
                   <div
                     contentEditable={note != null ? note.can_edit : true}
                     ref={titleRef}
-                    className="outline-0 font-bold"
+                    className="outline-0 font-bold dark:text-white"
                   >
                     {title}
                   </div>
-                  {isEdited && <p className="text-sm">(Unsaved changes)</p>}
+                  {isEdited && (
+                    <p className="text-sm dark:text-white">(Unsaved changes)</p>
+                  )}
                 </td>
               </tr>
 
               <tr>
                 <td>
-                  <div className="font-bold text-gray-700">Author</div>
+                  <div className="font-bold text-gray-700 dark:text-gray-400">
+                    Author
+                  </div>
                 </td>
                 <td>
                   <Badge
@@ -215,7 +223,9 @@ function Edit() {
               </tr>
               <tr>
                 <td>
-                  <div className="font-bold text-gray-700">Label</div>
+                  <div className="font-bold text-gray-700 dark:text-gray-400">
+                    Label
+                  </div>
                 </td>
                 <td>
                   {/* <Badge rounded color="blue" text={(note != null && note.label)? note.label : 'empty'} /> */}
@@ -225,7 +235,9 @@ function Edit() {
 
               <tr>
                 <td>
-                  <div className="font-bold text-gray-700">Access</div>
+                  <div className="font-bold text-gray-700 dark:text-gray-400">
+                    Access
+                  </div>
                 </td>
                 <td>
                   {/* <div className='inline-flex items-center'>
@@ -239,7 +251,9 @@ function Edit() {
 
               <tr>
                 <td>
-                  <div className="font-bold text-gray-700">Permission</div>
+                  <div className="font-bold text-gray-700 dark:text-gray-400">
+                    Permission
+                  </div>
                 </td>
                 <td>
                   <div className="inline-flex items-center">
@@ -266,12 +280,12 @@ function Edit() {
           </div>
           {/* <div className="mb-3 px-2">
             <div className='flex gap-3 items-center'>
-              <div className='font-bold text-gray-700'>Title</div>
+              <div className='font-bold text-gray-700 dark:text-gray-400'>Title</div>
               <div contentEditable ref={titleRef} className='outline-0 font-bold'>{title}</div>
             </div>
             
             <div className='flex gap-3 items-center'>
-              <div className='font-bold text-gray-700'>Label</div>
+              <div className='font-bold text-gray-700 dark:text-gray-400'>Label</div>
               <Badge rounded color="blue" text={note.label ?? 'empty'} />
             </div>
         </div> */}

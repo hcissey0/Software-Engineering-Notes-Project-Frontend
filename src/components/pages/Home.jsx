@@ -24,7 +24,13 @@ const Home = () => {
         */ 
       const func = async ()=>{
         const usernotes = await fromServers([DOMAIN + `/api/get-notes/?username=${localStorage.getItem('get_notes_for')}`, JSON_DOMAIN + '/get-notes/'], {auth:true}); // remove auth for when using json server (json server doesn't accept authorization)
-        if(usernotes!=null)setNotes(usernotes);
+        // if(usernotes!=null)setNotes(usernotes);
+        console.log(usernotes)
+        if (usernotes != null)
+          if (localStorage.getItem('username') != localStorage.getItem('get_notes_for'))
+            setNotes(usernotes.filter(note => !(note.private)));
+          else
+            setNotes(usernotes);
       };
       func();
     

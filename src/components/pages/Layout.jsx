@@ -3,12 +3,14 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 import SearchBox from "../molecules/SearchBox";
 import ThemeToggle from "../atoms/ThemeToggle";
 import { Link, Outlet } from "react-router-dom";
-import {isAuthenticated } from "../../utils/loaders";
+import { isAuthenticated } from "../../utils/loaders";
 import Avatar from "../atoms/Avatar";
+import { ErrorBoundary } from "../../ErrorBoundary";
+import ErrorPage from "./Error";
 // eslint-disable-next-line react/prop-types
 const Layout = ({ children }) => {
   return (
-    <>
+    <ErrorBoundary fallback={<ErrorPage />}>
       <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between gap-4">
@@ -35,7 +37,10 @@ const Layout = ({ children }) => {
                   ></path>
                 </svg>
               </button>
-              <Link to={"/" + localStorage.getItem('username')} className="flex ms-2 md:me-24">
+              <Link
+                to={"/" + localStorage.getItem("username")}
+                className="flex ms-2 md:me-24"
+              >
                 <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
                   Notes
                 </span>
@@ -46,7 +51,7 @@ const Layout = ({ children }) => {
             </div>
             <div className="flex items-center">
               <ThemeToggle />
-              <Avatar/>
+              <Avatar />
             </div>
           </div>
         </div>
@@ -61,8 +66,8 @@ const Layout = ({ children }) => {
           {/* this is the main ul */}
 
           {isAuthenticated() && <ul></ul>}
-          {!isAuthenticated() && 
-              <ul className="space-y-2 font-medium overflow-y-auto">
+          {!isAuthenticated() && (
+            <ul className="space-y-2 font-medium overflow-y-auto">
               <li>
                 <a
                   href="#"
@@ -106,8 +111,7 @@ const Layout = ({ children }) => {
                 </a>
               </li>
             </ul>
-          }
-        
+          )}
 
           <Link
             type="button"
@@ -115,10 +119,7 @@ const Layout = ({ children }) => {
             reloadDocument
             className="flex rounded-md items-center justify-center gap-2 shadow-lg focus:outline-none focus:ring-2 focus:ring-green-300 text-white bg-green-700 hover:bg-green-800 font-bold px-5 py-2.5  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
           >
-            
-            <span>
-            Add Note
-            </span>
+            <span>Add Note</span>
             <svg
               className="w-[24px] h-[24px]"
               aria-hidden="true"
@@ -141,9 +142,9 @@ const Layout = ({ children }) => {
       </aside>
 
       <div className="mt-[71px] sm:ml-52">
-        <Outlet/>
+        <Outlet />
       </div>
-    </>
+    </ErrorBoundary>
   );
 };
 

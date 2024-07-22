@@ -9,7 +9,7 @@ import DropdownSkeleton from './DropdownSkeleton';
 
 const LabelDropdown = ({label, onChange}) => {
   const defaultLabel = {title: 'empty', color:'blue'}
-  const colors = ['blue', 'orange', 'green', 'pink', 'indigo', 'purple', 'gray'];
+  const colors = ['blue', 'orange', 'green', 'pink', 'indigo', 'purple','red', 'yellow', 'sky', 'brown'];
   const [color, setColor] = useState(getRandomColor())
   const defaultLabels = useRef(null);
   const [open, setOpen] = useState(false);

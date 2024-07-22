@@ -5,11 +5,11 @@ import React from 'react'
 const css = `
 bg-green-100 bg-blue-100 bg-orange-100 
 bg-pink-100 bg-indigo-100 bg-purple-100 
-bg-gray-100 
+bg-red-100 bg-yellow-100 bg-brown-100 bg-sky-100
 
 text-green-800 text-blue-800 text-orange-800
 text-pink-800 text-indigo-800 text-purple-800
-text-purple-800
+text-red-800 text-yellow-800 text-brown-800 text-sky-800
 `
  
 const Badge = ({

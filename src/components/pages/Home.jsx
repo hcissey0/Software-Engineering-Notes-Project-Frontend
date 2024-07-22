@@ -27,6 +27,9 @@ const Home = () => {
         // if(usernotes!=null)setNotes(usernotes);
         console.log(usernotes)
         if (usernotes != null)
+          // Farouq kraa you dey pri too much: the logic for handling note visibility will be done in the backend. I already have that code ready
+           // what if someone has read access or write access ?
+           // just leave the Access dropdown to me 
           if (localStorage.getItem('username') != localStorage.getItem('get_notes_for'))
             setNotes(usernotes.filter(note => !(note.private)));
           else

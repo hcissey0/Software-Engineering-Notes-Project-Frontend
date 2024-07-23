@@ -7,6 +7,8 @@ import { isAuthenticated } from "../../utils/loaders";
 import Avatar from "../atoms/Avatar";
 import { ErrorBoundary } from "../../ErrorBoundary";
 import ErrorPage from "./Error";
+import LabelSettings from "../organisms/LabelSettings";
+import { IconSettings } from "@tabler/icons-react";
 // eslint-disable-next-line react/prop-types
 const Layout = ({ children }) => {
   return (
@@ -65,10 +67,19 @@ const Layout = ({ children }) => {
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800 flex flex-col justify-between">
           {/* this is the main ul */}
 
-          {isAuthenticated() && <ul></ul>}
-          {!isAuthenticated() && (
+          {/* {isAuthenticated() && <ul></ul>} */}
+        
             <ul className="space-y-2 font-medium overflow-y-auto">
               <li>
+                <a
+                  href="#"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                >
+                  <IconSettings/>
+                  <span className="flex-1 ms-3 whitespace-nowrap">Settings</span>
+                </a>
+              </li>
+              {/* <li>
                 <a
                   href="#"
                   className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
@@ -109,9 +120,10 @@ const Layout = ({ children }) => {
                   </svg>
                   <span className="flex-1 ms-3 whitespace-nowrap">Sign Up</span>
                 </a>
-              </li>
+              </li> */}
+              <LabelSettings/>
             </ul>
-          )}
+          
 
           <Link
             type="button"

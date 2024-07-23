@@ -49,7 +49,15 @@ function Edit() {
   const titleRef = useRef();
   
   useEffect(()=>{
-    if(note != null)setIsEdited(content != originalContent.current || label.id != originalLabel.current.id);
+    if(note != null)
+      {
+        if(label != null){
+          setIsEdited(content != originalContent.current || label.id != originalLabel.current.id);
+        }
+        else{
+          setIsEdited(content != originalContent.current);
+        }
+      }
   }, [content, label])
 
 

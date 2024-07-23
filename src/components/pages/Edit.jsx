@@ -15,28 +15,26 @@ import Link from "@tiptap/extension-link";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { createLowlight } from "lowlight";
 import Placeholder from "@tiptap/extension-placeholder";
-import { IconEye, IconLock, IconPencil } from "@tabler/icons-react";
+import { IconAsterisk, IconEye, IconLock, IconPencil } from "@tabler/icons-react";
 import hljs from "highlight.js";
 import Spinner from "../organisms/Spinner";
 import Underline from "@tiptap/extension-underline";
 import LabelDropdown from "../organisms/LabelDropdown";
 import AccessDropdown from "../organisms/AccessDropdown";
 function Edit() {
-  const lowlight = createLowlight();
-
-  // register languages that you are planning to use
-  function escapeHtml(unsafe) {
-    return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-  }
-
-  const codeExample = "for element in name";
-
-  // const highlighted = hljs.highlight(codeExample, {language: 'typescript'});
-  // console.log(highlighted);
-  // const content = '<p>Regular paragraph</p><pre><code>' + highlighted.value + '</code></pre>';
-  // console.log(content);
-
   const note = useLoaderData();
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({ codeBlock: false }),
+      Link,
+      Underline,
+      Placeholder.configure({ placeholder: "Write something ..." }),
+    ],
+    content: note != null ? note.content : "",
+    editable: note != null ? note.can_edit : true,
+  });
+
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(true);
   const [title, setTitle] = useState(note != null? note.title: 'Untitled');
@@ -44,24 +42,21 @@ function Edit() {
   const [noteId, setNoteId] = useState(note != null ? note.id: null);
   const author = useRef(note != null? note.author: localStorage.getItem('username')); // author does not change
   const [notes, setNotes] = useState(null);
+  const [isEdited, setIsEdited] = useState(false);
+  const [content, setContent] = useState(editor.getHTML())
+  const originalContent = useRef(content)
+  const originalLabel = useRef(label)
   const titleRef = useRef();
   
+  useEffect(()=>{
+    setIsEdited(content != originalContent.current || label.id != originalLabel.current.id)
+  }, [content, label])
 
-  console.log('new label value is', label);
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({ codeBlock: false }),
-      Link,
-      Underline,
-      // CodeBlockLowlight.configure({ lowlight }),
-      Placeholder.configure({ placeholder: "Write something ..." }),
-    ],
-    content: note != null ? note.content : "",
-    editable: note != null ? note.can_edit : true,
-  });
 
-  const [isEdited, setIsEdited] = useState(false);
-  let originalContent = editor.getHTML();
+const handleContentChange = (newContent)=>{
+  setContent(newContent);
+}
+
 
   useEffect(() => {
     const func = async () => {
@@ -78,40 +73,11 @@ function Edit() {
     }
   }, [saved]);
   
-  // ! Probably a better way to do this useEffect below (Probably using an onChange event on the main editor object)
-  useEffect(() => {
-    document.querySelector(".m_4574a3c4.mantine-RichTextEditor-toolbar").childNodes.forEach((btn) => {
-      btn.addEventListener("click", function () {
-        setTimeout(() => {
-          if (editor.getHTML() !== originalContent) {
-            setIsEdited(true);
-            localStorage.setItem("isEdited", true);
-          }
-        }, 300); // hahahahaha
-      });
-    });
-
-    document.querySelector(".tiptap.ProseMirror").addEventListener("input", (event) => {
-      switch (event.type) {
-        case "input":
-        case "keydown":
-        case "paste":
-        case "cut":
-          setIsEdited(true);
-          localStorage.setItem("isEdited", true);
-          break;
-        default:
-          break;
-      }
-    });
-  }, []);
-// ! above useEffect will get sanitized soon
   
   const handleLabelChange = (label)=>{
     setLabel(label);
   }
   const handleSave = async () => {
-    console.log('This is the label before updating', label);
     let data;
     const brief = truncateText(editor.getText());
     const note = {
@@ -121,7 +87,6 @@ function Edit() {
       label: label.title != 'empty'? {...label, labelId:label.id}:null,
       content: editor.getHTML(),
     };
-     console.log('this is the note before updating', note); 
      
     setSaving(true);
     if (noteId != null) {
@@ -132,11 +97,11 @@ function Edit() {
       // return;
       data = await fetchData(DOMAIN + `/api/update-note/${noteId}/`, { method: "PATCH", body: note });
       if (data != null) {
-        console.log(data);
         setSaving(false);
         setSaved(true);
         setIsEdited(false);
-        localStorage.removeItem("isEdited"); // ! usually dangerous to put the state of objects in localStorage it might remain there without getting removed
+        originalContent.current = data.content
+        originalLabel.current = data.label
       }
     } else {
       // create a new note
@@ -187,7 +152,9 @@ function Edit() {
                   <div contentEditable={note != null ? note.can_edit : true} ref={titleRef} className="outline-0 font-bold">
                     {title}
                   </div>
-                  {isEdited && <p className="text-sm">(Unsaved changes)</p>
+                  {isEdited && 
+                  // <p className="text-sm">(Unsaved changes)</p>
+                   <IconAsterisk className="w-3 h-3"/>
                    // * will probably use a star icon here (maybe positioned absolutely but relative to the title div) 
                   }
                 </td>
@@ -255,7 +222,7 @@ function Edit() {
           <div className={`${saving ? "opacity-1" : "opacity-0"}`}>
             <Spinner text="Saving ..." />
           </div>
-          <Mantine editor={editor} />
+          <Mantine editor={editor} onChange={handleContentChange} content={originalContent.current} />
           {(note == null || note.can_edit) && (
             <div>
               <button

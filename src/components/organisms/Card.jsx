@@ -9,7 +9,6 @@ import Dropdown from "./Dropdown";
 
 
 const Card = ({ note, list = false, addClass=''}) => {
-  console.log(note);
   const truncatedText = truncateText(note.brief);
   // // Call the function to truncate text to 30 words
   // truncateText('text-container', 30);

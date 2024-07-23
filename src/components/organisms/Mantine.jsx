@@ -17,7 +17,12 @@ import {
   IconUnlink,
 } from "@tabler/icons-react";
 import { MantineProvider } from "@mantine/core";
-const Mantine = ({ editor }) => {
+import { useEffect, useState } from "react";
+
+const Mantine = ({ editor, onChange, content }) => {
+
+  onChange(editor.getHTML()) // set the content of the editor
+  
   const size = "24px";
   const generalClasses = "hover:bg-gray-200 border rounded-sm cursor-pointer ";
   const iconActive = "stroke-blue-700";
@@ -101,7 +106,7 @@ const Mantine = ({ editor }) => {
             {/* <RichTextEditor.CodeBlock icon={CodeIcon} /> */}
           </RichTextEditor.ControlsGroup>
 
-          <RichTextEditor.ControlsGroup className="border relativ mt-2 flex gap-1 rounded-md me-2">
+          <RichTextEditor.ControlsGroup className="relative mt-2 flex gap-1 rounded-md me-2">
             <RichTextEditor.Link icon={LinkIcon} />
             <RichTextEditor.Unlink icon={UnlinkIcon} />
             <RichTextEditor.BulletList icon={BulletListIcon} />

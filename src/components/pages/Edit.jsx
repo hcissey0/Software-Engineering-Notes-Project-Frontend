@@ -49,7 +49,7 @@ function Edit() {
   const titleRef = useRef();
   
   useEffect(()=>{
-    setIsEdited(content != originalContent.current || label.id != originalLabel.current.id)
+    if(note != null)setIsEdited(content != originalContent.current || label.id != originalLabel.current.id);
   }, [content, label])
 
 
@@ -146,7 +146,7 @@ const handleContentChange = (newContent)=>{
                 <tr>
           
                 <td>
-                  <div className="font-bold text-gray-700 me-4">Title</div>
+                  <div className="font-bold text-gray-700 dark:text-white me-4">Title</div>
                 </td>
                 <td className="flex gap-3">
                   <div contentEditable={note != null ? note.can_edit : true} ref={titleRef} className="outline-0 font-bold">
@@ -162,19 +162,22 @@ const handleContentChange = (newContent)=>{
 
               <tr>
                 <td>
-                  <div className="font-bold text-gray-700">Author</div>
+                  <div className="font-bold text-gray-700 dark:text-white">Author</div>
                 </td>
                 <td>
-                  <Badge
+                  {/* <Badge
                     rounded
                     color="gray"
                     text={note != null && note.author != localStorage.getItem("username") ? note.author : localStorage.getItem("username") + " (You)"}
-                  />
+                  /> */}
+                  <div className="text-sm">
+                    {note != null && note.author != localStorage.getItem("username") ? note.author : localStorage.getItem("username") + " (You)"}
+                  </div>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <div className="font-bold text-gray-700">Label</div>
+                  <div className="font-bold text-gray-700 dark:text-white">Label</div>
                 </td>
                 <td>
                   <LabelDropdown label={label} onChange={handleLabelChange}/>
@@ -183,7 +186,7 @@ const handleContentChange = (newContent)=>{
 
               <tr>
                 <td>
-                  <div className="font-bold text-gray-700">Access</div>
+                  <div className="font-bold text-gray-700 dark:text-white">Access</div>
                 </td>
                 <td>
                   {/* <div className='inline-flex items-center'>
@@ -197,7 +200,7 @@ const handleContentChange = (newContent)=>{
 
               <tr>
                 <td>
-                  <div className="font-bold text-gray-700">Permission</div>
+                  <div className="font-bold text-gray-700 dark:text-white">Permission</div>
                 </td>
                 <td>
                   <div className="inline-flex items-center">

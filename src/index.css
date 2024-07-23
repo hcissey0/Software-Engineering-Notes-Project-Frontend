@@ -10,6 +10,7 @@
 
 body {
     font-family: 'poppins';
+    @apply dark:text-gray-400
 }
 
 .m_c2204cc2 .ProseMirror p.is-editor-empty:first-of-type::before {
@@ -20,7 +21,8 @@ body {
     user-select: none;
     float: left;
     height: 0;
-    color: var(--mantine-color-placeholder);
+    /* color: var(--mantine-color-placeholder); */
+    @apply dark:text-gray-200 !important;
 }
 
 .mantine-RichTextEditor-toolbar{
@@ -28,7 +30,7 @@ body {
 }
 
 .mantine-RichTextEditor-content a{
-    @apply text-blue-700 hover:underline underline-offset-4 cursor-pointer;
+    @apply text-blue-700 dark:text-blue-600 hover:underline underline-offset-4 cursor-pointer;
 }
 
 .mantine-RichTextEditor-content ul{
@@ -41,11 +43,11 @@ body {
 }
 
 .mantine-RichTextEditor-content div{
-    @apply outline-0 min-h-24
+    @apply outline-0 min-h-24 dark:text-gray-100
 }
 
 .mantine-RichTextEditor-linkEditor{
-    @apply absolute right-80 flex items-center shadow-md border-sky-500 gap-2 top-40 bg-white rounded-md p-2;
+    @apply absolute right-80 flex items-center shadow-md border-sky-500 gap-2 top-40 bg-white dark:bg-gray-800 rounded-md p-2;
 }
 
 

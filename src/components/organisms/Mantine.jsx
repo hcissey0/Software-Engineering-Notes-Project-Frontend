@@ -24,8 +24,8 @@ const Mantine = ({ editor, onChange, content }) => {
   onChange(editor.getHTML()) // set the content of the editor
   
   const size = "24px";
-  const generalClasses = "hover:bg-gray-200 border rounded-sm cursor-pointer ";
-  const iconActive = "stroke-blue-700";
+  const generalClasses = "hover:bg-gray-200 dark:hover:bg-gray-800 border rounded-sm cursor-pointer dark:border-transparent ";
+  const iconActive = "stroke-blue-700 dark:stroke-blue-700";
   const LinkIcon = () => (
     <IconLink
       className={generalClasses + `${editor.isActive("link") && iconActive}`}
@@ -115,7 +115,7 @@ const Mantine = ({ editor, onChange, content }) => {
             <RichTextEditor.Redo icon={RedoIcon} />
           </RichTextEditor.ControlsGroup>
         </RichTextEditor.Toolbar>
-        <RichTextEditor.Content className="mt-2 bg-white min-h-20 w-2/3 p-2 rounded-md" />
+        <RichTextEditor.Content className="mt-2 bg-white dark:bg-gray-700 dark:border-gray-600 min-h-20 w-2/3 p-2 rounded-md" />
         {/* call oninput or other event handlers on the content component above */}
       </RichTextEditor>
     </MantineProvider>

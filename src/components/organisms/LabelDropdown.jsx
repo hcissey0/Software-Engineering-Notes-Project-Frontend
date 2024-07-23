@@ -85,7 +85,7 @@ useEffect(()=>{
             </div>
 
 
-        {open &&  <div id="dropdown" className="z-10 bg-white divide-y divide-gray-100 absolute left-4 top-8 rounded-md shadow-lg min-w-44 dark:bg-gray-700">
+        {open &&  <div id="dropdown" className="z-10 bg-white absolute left-4 top-8 rounded-md shadow-lg min-w-44 dark:bg-gray-800">
         <div className='p-1 py-2'>
           <input type="text" autoFocus maxLength={25} placeholder='Search label ...' ref={labelSearchRef} onInput={()=>{filterLabels(labelSearchRef.current.value.toLowerCase())}} className='generalInput' />
         </div>
@@ -95,7 +95,7 @@ useEffect(()=>{
         <ul className="p-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
             {
                 labels.map((label)=>
-                    <li className='mb-2 hover:bg-gray-100 cursor-pointer p-1 flex justify-between' onClick={()=>{setChosen(label)}}>
+                    <li className='mb-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md cursor-pointer p-1 flex justify-between' onClick={()=>{setChosen(label)}}>
                          <Badge rounded text={label.title} color={label.color}/>
                          {chosen.title== label.title && 
                          

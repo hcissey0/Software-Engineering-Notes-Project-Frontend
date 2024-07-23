@@ -6,10 +6,10 @@ import { fetchData } from '../../utils/jsonServer';
 import { DOMAIN } from '../../utils/global';
 import Spinner from './Spinner';
 import DropdownSkeleton from './DropdownSkeleton';
+import { getRandomColor } from '../../utils/global';
 
 const LabelDropdown = ({label, onChange}) => {
   const defaultLabel = {title: 'empty', color:'blue'}
-  const colors = ['blue', 'orange', 'green', 'pink', 'indigo', 'purple','red', 'yellow', 'sky', 'stone'];
   const [color, setColor] = useState(getRandomColor())
   const defaultLabels = useRef(null);
   const [open, setOpen] = useState(false);
@@ -18,11 +18,6 @@ const LabelDropdown = ({label, onChange}) => {
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef();
   const labelSearchRef = useRef();
-
-  function getRandomColor(){
-    const randomIndex = Math.floor(Math.random() * colors.length);
-    return colors[randomIndex];
-}
 
   const filterLabels = (name)=>{
     // console.log(name);
@@ -92,7 +87,7 @@ useEffect(()=>{
 
         {open &&  <div id="dropdown" className="z-10 bg-white divide-y divide-gray-100 absolute left-4 top-8 rounded-md shadow-lg min-w-44 dark:bg-gray-700">
         <div className='p-1 py-2'>
-          <input type="text" autoFocus maxLength={25} placeholder='Search label ...' ref={labelSearchRef} onInput={()=>{filterLabels(labelSearchRef.current.value)}} className='generalInput' />
+          <input type="text" autoFocus maxLength={25} placeholder='Search label ...' ref={labelSearchRef} onInput={()=>{filterLabels(labelSearchRef.current.value.toLowerCase())}} className='generalInput' />
         </div>
       {
         labels != null &&

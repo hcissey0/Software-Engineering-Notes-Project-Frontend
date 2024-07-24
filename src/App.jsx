@@ -1,8 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Mantine from "./components/organisms/Mantine";
-import { MantineProvider } from "@mantine/core";
-import Dropdown from "./components/organisms/Dropdown";
-import DropdownSkeleton from "./components/organisms/DropdownSkeleton";
+import { useRef, useState } from "react";
+import Modal from "./components/organisms/Modal";
+
 const PrivateRoute = ({ children }) => {
   const user = "e"; // to be implemented
   if (!user) return <Navigate to={"/login"} />;
@@ -16,12 +15,13 @@ const PublicRoute = ({ children }) => {
 };
 
 const App = ()=>{
+  const [openModal, setOpenModal] = useState(false);
+  
   return(
-    <div className='p-4'>
-        <div className="w-40">
-          <DropdownSkeleton/>
-        </div>
-    </div>
+    <>
+      <button onClick={()=>{setOpenModal(true)}}>Toggle modal</button>
+      <Modal openModal={openModal} setOpenModal={setOpenModal}/>
+    </>
   );
 };
 

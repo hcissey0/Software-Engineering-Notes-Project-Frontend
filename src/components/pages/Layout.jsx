@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import SearchBox from "../molecules/SearchBox";
 import ThemeToggle from "../atoms/ThemeToggle";
@@ -9,8 +9,12 @@ import { ErrorBoundary } from "../../ErrorBoundary";
 import ErrorPage from "./Error";
 import LabelSettings from "../organisms/LabelSettings";
 import { IconSettings } from "@tabler/icons-react";
+import Modal from "../organisms/Modal";
+
 // eslint-disable-next-line react/prop-types
-const Layout = ({ children }) => {
+const Layout = () => {
+  const [openModal, setOpenModal] = useState(false); 
+
   return (
     <ErrorBoundary fallback={<ErrorPage />}>
       <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -71,13 +75,13 @@ const Layout = ({ children }) => {
         
             <ul className="space-y-2 font-medium overflow-y-auto">
               <li>
-                <a
-                  href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                >
-                  <IconSettings className="dark:stroke-gray-400"/>
-                  <span className="flex-1 ms-3 whitespace-nowrap">Settings</span>
-                </a>
+                <button
+                  onClick={()=>{setOpenModal(true)}}
+                  className="flex items-center p-2 w-full  text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                > 
+                   <IconSettings className="dark:stroke-gray-400"/>
+                  <span className="ms-3 whitespace-nowrap">Settings</span>
+                </button>
               </li>
               {/* <li>
                 <a
@@ -155,6 +159,7 @@ const Layout = ({ children }) => {
 
       <div className="mt-[71px] sm:ml-52">
         <Outlet />
+      <Modal openModal={openModal} setOpenModal={setOpenModal}/>
       </div>
     </ErrorBoundary>
   );

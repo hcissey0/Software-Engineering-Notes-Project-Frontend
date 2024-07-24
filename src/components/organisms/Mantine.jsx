@@ -21,7 +21,11 @@ import { useEffect, useState } from "react";
 
 const Mantine = ({ editor, onChange, content }) => {
 
-  onChange(editor.getHTML()) // set the content of the editor
+  useEffect(
+    ()=>{
+    onChange(editor.getHTML()) // set the content of the editor
+    }
+  );
   
   const size = "24px";
   const generalClasses = "hover:bg-gray-200 dark:hover:bg-gray-800 border rounded-sm cursor-pointer dark:border-transparent ";
@@ -115,7 +119,7 @@ const Mantine = ({ editor, onChange, content }) => {
             <RichTextEditor.Redo icon={RedoIcon} />
           </RichTextEditor.ControlsGroup>
         </RichTextEditor.Toolbar>
-        <RichTextEditor.Content className="mt-2 bg-white dark:bg-gray-700 dark:border-gray-600 min-h-20 w-2/3 p-2 rounded-md" />
+        <RichTextEditor.Content className="mt-2 bg-white dark:bg-gray-700 dark:border-gray-600 min-h-20 w-full p-2 rounded-md" />
         {/* call oninput or other event handlers on the content component above */}
       </RichTextEditor>
     </MantineProvider>

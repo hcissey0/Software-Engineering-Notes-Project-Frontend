@@ -44,7 +44,7 @@ const Dropdown = ({ link }) => {
             <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z">
             </path></svg>
           </button>
-          {open &&  <div id="dropdown" className="z-10 bg-white divide-y divide-gray-100 absolute right-3 top-12 rounded-md shadow-lg w-44 dark:bg-gray-700">
+          {open &&  <div id="dropdown" className="z-10 bg-white divide-y divide-gray-100 absolute right-3 top-12 rounded-md shadow-lg w-44 dark:bg-gray-700 dark:hover:bg-gray-800">
         <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
         <li className='flex items-center px-4 py-2 gap-2 hover:bg-gray-100 dark:hover:bg-gray-600'>
             <IconLink className='h-5 w-5'/>

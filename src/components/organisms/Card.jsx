@@ -6,6 +6,7 @@ import './Card.css';
 import { Link } from "react-router-dom";
 import { truncateText } from "../../utils/global";
 import Dropdown from "./Dropdown";
+import { IconLock, IconLockOpen } from "@tabler/icons-react";
 
 
 const Card = ({ note, list = false, addClass=''}) => {
@@ -65,12 +66,18 @@ const Card = ({ note, list = false, addClass=''}) => {
           {moment(note.created).fromNow()}
         </div>
            
+          <div className="inline-flex gap-2 items-center">
+          {note.private? 
+           <IconLock className="w-5 h-5"/>: 
+           <IconLockOpen className="w-5 h-5"/>
+          }
           {
             // if there's no label then we don't show the badge
           note.label && <div>
           <Badge rounded color={note.label.color} text={note.label.title} />
           </div>
           }
+          </div>
         
       </div>
     </div>

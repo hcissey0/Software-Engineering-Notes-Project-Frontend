@@ -20,7 +20,7 @@ const AccessDropdown = ({ note, onChange}) => {
  
 
   const handleClick = () => {
-    if (localStorage.getItem('username') != localStorage.getItem('get_notes_for')) return;
+    if(note != null && !note.can_edit)return;
     setOpen(!open);
   };
 

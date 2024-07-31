@@ -2,13 +2,11 @@ import { useState } from "react";
 import { Form, Link } from "react-router-dom";
 import "../../App.css";
 import ThemeToggle from "../atoms/ThemeToggle";
-import toast, { Toaster } from 'react-hot-toast';
 
 
 const Login = () => {
   return (
     <div className="w-screen h-screen flex items-center justify-center">
-      <Toaster />
       <div className="absolute top-5 right-5">
         <ThemeToggle />
       </div>

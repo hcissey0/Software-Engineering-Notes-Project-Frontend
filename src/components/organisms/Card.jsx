@@ -9,7 +9,7 @@ import Dropdown from "./Dropdown";
 import { IconLock, IconLockOpen } from "@tabler/icons-react";
 
 
-const Card = ({ note, list = false, addClass=''}) => {
+const Card = ({ note, list = false, addClass='', onChange}) => {
   const truncatedText = truncateText(note.brief);
   // // Call the function to truncate text to 30 words
   // truncateText('text-container', 30);
@@ -28,7 +28,7 @@ const Card = ({ note, list = false, addClass=''}) => {
     <div
       className={`${addClass} ${
         list ? "w-full" : ""
-      } transition-all basis-1/4 block relative max-w-full p-4 cursor-pointer bg-white border border-transparent rounded-md shadow-sm hover:bg-sky-300/20  dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700`}
+      } transition-all basis-1/4 block relative max-w-full p-4 cursor-pointer bg-white border border-transparent rounded-md shadow-sm hover:bg-sky-300/20  dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600`}
     >
       
      {/* title section  */}
@@ -37,7 +37,7 @@ const Card = ({ note, list = false, addClass=''}) => {
           {note.title || "Noteworthy technology acquisitions 2021"}
         </Link>
 
-          <Dropdown link={note.id}/>
+          <Dropdown note={note} onChange={onChange}/>
         
       </div>
 

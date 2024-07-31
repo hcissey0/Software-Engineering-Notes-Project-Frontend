@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import "react-quill/dist/quill.snow.css";
 import Card from "../organisms/Card";
 import "./edit.css";
-import { DOMAIN, JSON_DOMAIN } from "../../utils/global";
+import { DOMAIN} from "../../utils/global";
 import { truncateText } from "../../utils/global";
 import { useLoaderData } from "react-router-dom";
 import { fetchData } from "../../utils/jsonServer";
@@ -12,16 +12,14 @@ import Badge from "../atoms/Badge";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import { createLowlight } from "lowlight";
 import Placeholder from "@tiptap/extension-placeholder";
-import { IconAsterisk, IconDots, IconEye, IconLock, IconPencil, IconShare, IconStar } from "@tabler/icons-react";
-import hljs from "highlight.js";
+import { IconAsterisk, IconDots, IconEye, IconPencil, IconShare, IconStar } from "@tabler/icons-react";
 import Spinner from "../organisms/Spinner";
 import Underline from "@tiptap/extension-underline";
 import LabelDropdown from "../organisms/LabelDropdown";
 import AccessDropdown from "../organisms/AccessDropdown";
 import moment from "moment";
+import InviteModal from "../organisms/InviteModal";
 
 function Edit() {
   const note = useLoaderData();
@@ -46,23 +44,26 @@ function Edit() {
   const author = useRef(note != null? note.author: localStorage.getItem('username')); // author does not change
   const [notes, setNotes] = useState(null);
   const [isEdited, setIsEdited] = useState(false);
+  const [modified, setModified] = useState(note != null? note.modified: null)
   const [content, setContent] = useState(editor.getHTML())
   const originalContent = useRef(content)
   const originalLabel = useRef(label ?? {}) // originalLabel might be null (label is set within the LabelDropdown component so it won't be null but originalLabel will)
+  const originalAccess = useRef(note != null? (note.private ? 'private': 'public'): 'private') // this is a mere sting value as opposed to access which is an object
   const titleRef = useRef();
+  const [openModal, setOpenModal] = useState(false);
   
-
   useEffect(()=>{
     if(note != null)
       {  
-        if(label != null){
-          setIsEdited(content != originalContent.current || label.id != originalLabel.current.id);
+        if(label != null && access != null){
+          console.log(originalAccess.current);
+          setIsEdited(content != originalContent.current || label.id != originalLabel.current.id || access.name != originalAccess.current);
         }
         else{
           setIsEdited(content != originalContent.current);
         }
       }
-  }, [content, label])
+  }, [content, label, access])
 
 
 const handleContentChange = (newContent)=>{
@@ -117,8 +118,10 @@ const handleContentChange = (newContent)=>{
         setSaving(false);
         setSaved(true);
         setIsEdited(false);
-        originalContent.current = data.content
-        originalLabel.current = data.label
+        setModified(data.modified)
+        originalContent.current = data.content;
+        originalLabel.current = data.label;
+        originalAccess.current = data.private? 'private': 'public';
       }
     } else {
       // create a new note
@@ -133,8 +136,8 @@ const handleContentChange = (newContent)=>{
 
   return (
     <>
-
-     <div className='edit-container gap-28 items-start'>
+     <InviteModal openModal={openModal} setOpenModal={setOpenModal} />
+     <div className='edit-container gap-4 items-start'>
       {notes == null &&
         <div className='p-2 w-1/4 flex flex-col gap-y-2'>
          {placeholderCards(2)} 
@@ -148,7 +151,7 @@ const handleContentChange = (newContent)=>{
       }
 
       {(notes != null && notes.length > 0) && 
-          <div className="p-2 w-1/4 flex flex-col gap-y-2 h-[600px] overflow-y-auto" style={{scrollbarWidth: 'thin'}}>
+          <div className="p-2 w-1/4 flex flex-col gap-y-2" style={{scrollbarWidth: 'thin'}}>
             {notes.map((note) => (
               <Card key={note.id} note={note} />
             ))}
@@ -183,11 +186,6 @@ const handleContentChange = (newContent)=>{
                       <div className="font-bold text-gray-700 dark:text-white">Author</div>
                     </td>
                     <td>
-                      {/* <Badge
-                        rounded
-                        color="gray"
-                        text={note != null && note.author != localStorage.getItem("username") ? note.author : localStorage.getItem("username") + " (You)"}
-                      /> */}
                       <div className="text-sm">
                         {note != null && note.author != localStorage.getItem("username") ? note.author : localStorage.getItem("username") + " (You)"}
                       </div>
@@ -198,7 +196,7 @@ const handleContentChange = (newContent)=>{
                       <div className="font-bold text-gray-700 dark:text-white">Label</div>
                     </td>
                     <td>
-                      <LabelDropdown label={label} onChange={handleLabelChange}/>
+                      <LabelDropdown label={label} note={note} onChange={handleLabelChange}/>
                     </td>
                   </tr>
 
@@ -243,7 +241,7 @@ const handleContentChange = (newContent)=>{
               <div className={`${saving ? "opacity-1" : "opacity-0"}`}>
                 <Spinner text="Saving ..." />
               </div>
-              <Mantine editor={editor} onChange={handleContentChange} content={originalContent.current} />
+              <Mantine editor={editor} onChange={handleContentChange} note={note}/>
               {(note == null || note.can_edit) && (
                 <div>
                   <button
@@ -258,13 +256,15 @@ const handleContentChange = (newContent)=>{
 
         <div>
                 <div className="flex gap-3">
-                  {note != null &&
+                  {/* {modified != null &&
                     <div className="text-sm">
-                       <span className="text-nowrap">Edited {moment(note.modified).fromNow()}</span>
+                       <span className="text-nowrap">Edited {moment(modified).fromNow()}</span>
                     </div>
-                  }
-                    
-                   <IconShare className="w-5 h-5"/>
+                  } */}
+                  
+                   <button onClick={()=>{setOpenModal(true)}}>
+                    <IconShare className="w-5 h-5"/>
+                   </button>
                    <IconStar className="w-5 h-5"/>
                    <IconDots className="w-5 h-5"/>
                 </div>

@@ -14,6 +14,7 @@ const Home = () => {
   const [displayMode, setDisplayMode] = useState("grid");
   const [sortMode, setSortMode] = useState("date");
   const [notes, setNotes] = useState(null);
+  const [refresh, setRefresh] = useState(false); // just to refresh the page whenever change happens
 
   // get all notes
   useEffect(() => {
@@ -24,8 +25,6 @@ const Home = () => {
         */ 
       const func = async ()=>{
         const usernotes = await fromServers([DOMAIN + `/api/get-notes/?username=${localStorage.getItem('get_notes_for')}`, JSON_DOMAIN + '/get-notes/'], {auth:true}); // remove auth for when using json server (json server doesn't accept authorization)
-        // if(usernotes!=null)setNotes(usernotes);
-        console.log(usernotes)
         if (usernotes != null)
           // Farouq kraa you dey pri too much: the logic for handling note visibility will be done in the backend. I already have that code ready
            // what if someone has read access or write access ?
@@ -36,18 +35,21 @@ const Home = () => {
             setNotes(usernotes);
       };
       func();
-    
-  }, []);
+  }, [refresh]);
 
   const handleDisplayMode = (e) => {
     setDisplayMode(e.target.value);
   };
-
+  
   const handleSortMode = (e) => {
     setSortMode(e.target.value);
     notes.sort((a, b) => {
       return new Date(a.created) - new Date(b.created);
     });
+  };
+
+  const refreshPage = ()=>{
+    setRefresh(!refresh);
   };
 
   return (
@@ -161,7 +163,7 @@ const Home = () => {
       {(notes!= null && notes.length > 0) && 
         <div className="cards w-full">
           {notes.map((note) => (
-            <Card key={note.id} note={note} list={displayMode === "list"} />
+            <Card key={note.id} note={note} list={displayMode === "list"} onChange={refreshPage} />
           ))}
         </div>
       }

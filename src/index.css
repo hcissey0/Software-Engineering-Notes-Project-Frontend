@@ -30,7 +30,7 @@ body {
 }
 
 .mantine-RichTextEditor-content a{
-    @apply text-blue-700 dark:text-blue-600 hover:underline underline-offset-4 cursor-pointer;
+    @apply text-blue-700 dark:text-yellow-300 hover:underline underline-offset-4 cursor-pointer;
 }
 
 .mantine-RichTextEditor-content ul{

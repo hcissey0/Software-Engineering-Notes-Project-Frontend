@@ -16,6 +16,7 @@ const LabelSettings = () => {
   const [loading, setLoading] = useState(false);
   const [typing, setTyping] = useState(false);
   const [labels, setLabels] = useState(null);
+  const [refresh, setRefresh] = useState(false) // to refresh the label list when one gets modified
   const labelSearchRef = useRef();
   const defaultLabels = useRef(null);
 
@@ -29,9 +30,7 @@ const LabelSettings = () => {
       setLabels(defaultLabels.current.filter(label => label.title.toLowerCase().includes(name)));
     }
   
-  };
-
-  
+  };  
   
   const getLabels = async()=>{
       const labels = await fetchData(DOMAIN + '/api/get-labels/', {auth:true})
@@ -52,9 +51,13 @@ const LabelSettings = () => {
        }
      };
 
+  const refreshLabels = ()=>{
+    setRefresh(!refresh)
+  }
+
  useEffect(()=>{
     getLabels();
-}, [])
+}, [refresh])
 
   return (
     <>
@@ -74,10 +77,10 @@ const LabelSettings = () => {
             <input type="text" autoFocus maxLength={25} placeholder='Search label ...' defaultValue='' ref={labelSearchRef} onInput={()=>{filterLabels(labelSearchRef.current.value.toLowerCase())}} className='generalInput' />
           </div>    
         
-        <ul className="p-2 text-sm text-gray-700 dark:text-gray-200 h-[400px] overflow-y-auto" style={{scrollbarWidth: 'thin'}} aria-labelledby="dropdownDefaultButton">
+        <ul className="p-2 text-sm text-gray-700 dark:text-gray-200" style={{scrollbarWidth: 'thin'}} aria-labelledby="dropdownDefaultButton">
             {hasLabels &&
-                labels.map((label, index)=>
-                    <LabelSetting key={index} label={label}/>  
+                labels.map((label)=>
+                    <LabelSetting key={label.id} label={label} onChange={refreshLabels}/>  
                 )
             }
             {

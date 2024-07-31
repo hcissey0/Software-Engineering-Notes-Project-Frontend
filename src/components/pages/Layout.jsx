@@ -10,6 +10,7 @@ import ErrorPage from "./Error";
 import LabelSettings from "../organisms/LabelSettings";
 import { IconSettings } from "@tabler/icons-react";
 import Modal from "../organisms/Modal";
+import Favourites from "../organisms/Favourites";
 
 // eslint-disable-next-line react/prop-types
 const Layout = () => {
@@ -73,7 +74,7 @@ const Layout = () => {
 
           {/* {isAuthenticated() && <ul></ul>} */}
         
-            <ul className="space-y-2 font-medium overflow-y-auto">
+            <ul className="space-y-2 font-medium overflow-hidden">
               <li>
                 <button
                   onClick={()=>{setOpenModal(true)}}
@@ -126,6 +127,7 @@ const Layout = () => {
                 </a>
               </li> */}
               <LabelSettings/>
+              <Favourites/>
             </ul>
           
 

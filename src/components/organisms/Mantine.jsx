@@ -19,7 +19,7 @@ import {
 import { MantineProvider } from "@mantine/core";
 import { useEffect, useState } from "react";
 
-const Mantine = ({ editor, onChange, content }) => {
+const Mantine = ({ editor, onChange, note }) => {
 
   useEffect(
     ()=>{
@@ -29,7 +29,7 @@ const Mantine = ({ editor, onChange, content }) => {
   
   const size = "24px";
   const generalClasses = "hover:bg-gray-200 dark:hover:bg-gray-800 border rounded-sm cursor-pointer dark:border-transparent ";
-  const iconActive = "stroke-blue-700 dark:stroke-blue-700";
+  const iconActive = "stroke-blue-700 dark:stroke-yellow-300";
   const LinkIcon = () => (
     <IconLink
       className={generalClasses + `${editor.isActive("link") && iconActive}`}
@@ -98,6 +98,7 @@ const Mantine = ({ editor, onChange, content }) => {
   return (
     <MantineProvider>
       <RichTextEditor editor={editor}>
+        {(note == null || note.can_edit) &&
         <RichTextEditor.Toolbar sticky stickyOffset={60}>
           {/* A control group is a set of controls inside the toolbar */}
           <RichTextEditor.ControlsGroup className="mt-2 flex gap-1 me-4">
@@ -119,8 +120,9 @@ const Mantine = ({ editor, onChange, content }) => {
             <RichTextEditor.Redo icon={RedoIcon} />
           </RichTextEditor.ControlsGroup>
         </RichTextEditor.Toolbar>
+        }
+
         <RichTextEditor.Content className="mt-2 bg-white dark:bg-gray-700 dark:border-gray-600 min-h-20 w-full p-2 rounded-md" />
-        {/* call oninput or other event handlers on the content component above */}
       </RichTextEditor>
     </MantineProvider>
   );

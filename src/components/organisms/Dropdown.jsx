@@ -4,9 +4,14 @@ import { useState, useRef, useEffect } from 'react';
 import LabelDropdown from './LabelDropdown'
 import { DOMAIN, FRONTEND_DOMAIN } from '../../utils/global';
 import toast, { Toaster } from 'react-hot-toast';
+import { fetchData } from '../../utils/jsonServer';
+import Spinner from './Spinner';
+
 // * You must make a parent component of the dropdown position relative
-const Dropdown = ({ link }) => {
+const Dropdown = ({ note , onChange }) => {
+    const noteId = note.id; 
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
     const dropdownRef = useRef();
   
     const handleClickOutside = (e)=>{
@@ -16,7 +21,18 @@ const Dropdown = ({ link }) => {
       }
     };
 
-    const copyLink = (noteId) => {
+    const deleteNote = async() => {
+      setLoading(true)
+      const response = await fetchData(DOMAIN + `/api/delete-note/${noteId}`, {method:'DELETE', returnResponse:true});
+      if(response.ok){
+        toast.success("Note Deleted Successfully");
+        setLoading(false)
+        onChange()
+      }
+    };
+
+
+    const copyLink = () => {
       navigator.clipboard.writeText(`${FRONTEND_DOMAIN}/edit/?note_id=${noteId}/`);
       toast.success("Link copied to clipboard");
       // console.log("link copied to clipboard")
@@ -44,16 +60,29 @@ const Dropdown = ({ link }) => {
             <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z">
             </path></svg>
           </button>
-          {open &&  <div id="dropdown" className="z-10 bg-white divide-y divide-gray-100 absolute right-3 top-12 rounded-md shadow-lg w-44 dark:bg-gray-700 dark:hover:bg-gray-800">
-        <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-        <li className='flex items-center px-4 py-2 gap-2 hover:bg-gray-100 dark:hover:bg-gray-600'>
+          {open &&
+        <div id="dropdown" className="z-10 bg-white divide-y divide-gray-100 absolute right-3 top-12 rounded-md shadow-lg w-44 dark:bg-slate-900">
+        <ul className="py-2 text-sm text-gray-700 dark:text-white" aria-labelledby="dropdownDefaultButton">
+        <li className='flex items-center px-4 py-2 gap-2 hover:bg-gray-100 dark:hover:bg-slate-800'>
             <IconLink className='h-5 w-5'/>
-            <a href="#" onClick={() => copyLink(link)} className="block  dark:hover:text-white">Copy link</a>
+            <a href="#" className="block  dark:hover:text-white">Copy link</a>
         </li>
-        <li className='flex items-center px-4 py-2 gap-2 hover:bg-gray-100 dark:hover:bg-gray-600'>
-            <IconTrash className='h-5 w-5'/>
-            <a href="#" className="block dark:hover:text-white">Delete</a>
-        </li>
+        
+        {note.can_edit && 
+        
+          <li
+          onClick={deleteNote} 
+          className='flex items-center px-4 py-2 gap-2 hover:bg-gray-100 dark:hover:bg-slate-800'>
+              <IconTrash className='h-5 w-5'/>
+              <a href="#" className="block dark:hover:text-white">Delete</a>
+          </li>
+        }
+         {loading && 
+         
+          <li className='flex justify-center p-2'>
+              <Spinner/>
+          </li>
+         }
         </ul>
     </div>
 

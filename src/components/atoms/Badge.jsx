@@ -9,9 +9,9 @@ bg-red-100 bg-yellow-100 bg-stone-100 bg-sky-100
 
 dark styles
 
-dark:bg-green-700 dark:bg-blue-700 dark:bg-orange-700 
-dark:bg-pink-700 dark:bg-indigo-700 dark:bg-purple-700 
-dark:bg-red-700 dark:bg-yellow-700 dark:bg-stone-700 dark:bg-sky-700
+dark:bg-green-400 dark:bg-blue-400 dark:bg-orange-400 
+dark:bg-pink-400 dark:bg-indigo-400 dark:bg-purple-400 
+dark:bg-red-400 dark:bg-yellow-400 dark:bg-stone-400 dark:bg-sky-700
 
 text-green-800 text-blue-800 text-orange-800
 text-pink-800 text-indigo-800 text-purple-800
@@ -29,7 +29,7 @@ const Badge = ({
   
     // if (size === 'sm') {
         return (
-          <span className={`bg-${color}-100 text-${color}-800 text-nowrap text-xs font-medium me-2 px-2.5 py-0.5 rounded${rounded ? '-full': ''} dark:bg-${color}-700 dark:text-${color}-300 dark:text-gray-300`}>
+          <span className={`bg-${color}-100 text-${color}-800 dark:text-black text-nowrap text-xs max-w-full truncate font-medium me-2 px-2.5 py-0.5 rounded${rounded ? '-full': ''} dark:bg-${color}-400`}>
               {text}
           </span>
         )

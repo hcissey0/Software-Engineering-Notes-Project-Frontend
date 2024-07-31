@@ -8,7 +8,7 @@ import Spinner from './Spinner';
 import DropdownSkeleton from './DropdownSkeleton';
 import { getRandomColor } from '../../utils/global';
 
-const LabelDropdown = ({label, onChange}) => {
+const LabelDropdown = ({label, note, onChange}) => {
   const defaultLabel = {title: 'empty', color:'blue'}
   const [color, setColor] = useState(getRandomColor())
   const defaultLabels = useRef(null);
@@ -31,6 +31,7 @@ const LabelDropdown = ({label, onChange}) => {
   };
 
   const handleClick = ()=>{
+    if(note != null && !note.can_edit)return;
     setOpen(!open);
   };
 
@@ -85,7 +86,7 @@ useEffect(()=>{
             </div>
 
 
-        {open &&  <div id="dropdown" className="z-10 bg-white absolute left-4 top-8 rounded-md shadow-lg min-w-44 dark:bg-gray-800">
+        {open &&  <div id="dropdown" className="z-10 bg-white absolute left-4 top-8 rounded-md shadow-lg w-44 dark:bg-gray-800">
         <div className='p-1 py-2'>
           <input type="text" autoFocus maxLength={25} placeholder='Search label ...' ref={labelSearchRef} onInput={()=>{filterLabels(labelSearchRef.current.value.toLowerCase())}} className='generalInput' />
         </div>

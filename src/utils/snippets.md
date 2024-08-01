@@ -270,3 +270,49 @@ In this example:
 - `useEditor` initializes the editor.
 - `isActive('bold')` checks if the bold style is currently active.
 - The button's style changes based on whether bold is active.
+
+`Some code for handling pasting`
+```js
+import React, { useEffect } from 'react';
+import { MantineProvider } from '@mantine/core';
+import { RichTextEditor, useEditor } from '@mantine/rte';
+
+function App() {
+  const editor = useEditor({
+    value: '<p>Paste your link here...</p>',
+    onChange: (value) => console.log(value),
+  });
+
+  useEffect(() => {
+    const handlePaste = (event) => {
+      event.preventDefault();
+      const text = event.clipboardData.getData('text/plain');
+      const html = event.clipboardData.getData('text/html');
+
+      if (html) {
+        // If HTML content is available, use it
+        editor.commands.insertContent(html);
+      } else {
+        // Otherwise, use plain text
+        editor.commands.insertContent(`<a href="${text}">${text}</a>`);
+      }
+    };
+
+    editor.view.dom.addEventListener('paste', handlePaste);
+
+    return () => {
+      editor.view.dom.removeEventListener('paste', handlePaste);
+    };
+  }, [editor]);
+
+  return (
+    <MantineProvider withGlobalStyles withNormalizeCSS>
+      <div style={{ padding: '20px' }}>
+        <RichTextEditor editor={editor} />
+      </div>
+    </MantineProvider>
+  );
+}
+
+export default App;
+```

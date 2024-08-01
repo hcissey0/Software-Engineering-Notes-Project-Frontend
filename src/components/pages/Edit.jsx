@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import "react-quill/dist/quill.snow.css";
 import Card from "../organisms/Card";
 import "./edit.css";
-import { DOMAIN} from "../../utils/global";
+import { DOMAIN, FRONTEND_DOMAIN} from "../../utils/global";
 import { truncateText } from "../../utils/global";
 import { useLoaderData } from "react-router-dom";
 import { fetchData } from "../../utils/jsonServer";
@@ -35,6 +35,8 @@ function Edit() {
     editable: note != null ? note.can_edit : true,
   });
 
+  
+
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(true);
   const [title, setTitle] = useState(note != null? note.title: 'Untitled');
@@ -52,6 +54,31 @@ function Edit() {
   const titleRef = useRef();
   const [openModal, setOpenModal] = useState(false);
   
+  useEffect(() => {
+    const handlePaste = (event) => {
+      event.preventDefault();
+      const text = event.clipboardData.getData('text/plain');
+      const html = event.clipboardData.getData('text/html');
+      if(text != ''){
+        localStorage.removeItem('copied_note_link')
+        localStorage.removeItem('copied_note_title')
+      }
+
+      if (localStorage.getItem('copied_note_link')) {
+            const link = localStorage.getItem('copied_note_link');
+            const title = localStorage.getItem('copied_note_title');
+            editor.commands.insertContent(`<a href="${link}">${title}</a>`);
+      }
+    };
+
+    editor.view.dom.addEventListener('paste', handlePaste);
+
+    return () => {
+      editor.view.dom.removeEventListener('paste', handlePaste);
+    };
+  }, [editor]);
+
+
   useEffect(()=>{
     if(note != null)
       {  

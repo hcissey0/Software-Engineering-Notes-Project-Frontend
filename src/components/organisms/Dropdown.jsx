@@ -23,7 +23,7 @@ const Dropdown = ({ note , onChange }) => {
 
     const deleteNote = async() => {
       setLoading(true)
-      const response = await fetchData(DOMAIN + `/api/delete-note/${noteId}`, {method:'DELETE', returnResponse:true});
+      const response = await fetchData(DOMAIN + `/api/delete-note/${noteId}/`, {method:'DELETE', returnResponse:true});
       if(response.ok){
         toast.success("Note Deleted Successfully");
         setLoading(false)
@@ -32,8 +32,10 @@ const Dropdown = ({ note , onChange }) => {
     };
 
 
-    const copyLink = () => {
-      navigator.clipboard.writeText(`${FRONTEND_DOMAIN}/edit/?note_id=${noteId}/`);
+    const copyLink = async() => {
+      localStorage.setItem('copied_note_link', `${FRONTEND_DOMAIN}/edit/?note_id=${noteId}`);
+      localStorage.setItem('copied_note_title', note.title);
+      await navigator.clipboard.writeText('');
       toast.success("Link copied to clipboard");
       // console.log("link copied to clipboard")
     }
@@ -63,7 +65,9 @@ const Dropdown = ({ note , onChange }) => {
           {open &&
         <div id="dropdown" className="z-10 bg-white divide-y divide-gray-100 absolute right-3 top-12 rounded-md shadow-lg w-44 dark:bg-slate-900">
         <ul className="py-2 text-sm text-gray-700 dark:text-white" aria-labelledby="dropdownDefaultButton">
-        <li className='flex items-center px-4 py-2 gap-2 hover:bg-gray-100 dark:hover:bg-slate-800'>
+        <li
+        onClick={copyLink} 
+        className='flex items-center px-4 py-2 gap-2 hover:bg-gray-100 dark:hover:bg-slate-800'>
             <IconLink className='h-5 w-5'/>
             <a href="#" className="block  dark:hover:text-white">Copy link</a>
         </li>

@@ -20,6 +20,9 @@ import LabelDropdown from "../organisms/LabelDropdown";
 import AccessDropdown from "../organisms/AccessDropdown";
 import moment from "moment";
 import InviteModal from "../organisms/InviteModal";
+import { addToFavs } from "../organisms/Dropdown";
+import Highlight from "@tiptap/extension-highlight";
+import toast from "react-hot-toast";
 
 function Edit() {
   const note = useLoaderData();
@@ -29,9 +32,10 @@ function Edit() {
       StarterKit.configure({ codeBlock: false }),
       Link,
       Underline,
+      Highlight, 
       Placeholder.configure({ placeholder: "Write something ..." }),
     ],
-    content: note != null ? note.content : "",
+    content: note != null ? (typeof note.content == 'string'? note.content: note.content.html): "",
     editable: note != null ? note.can_edit : true,
   });
 
@@ -41,6 +45,7 @@ function Edit() {
   const [saved, setSaved] = useState(true);
   const [title, setTitle] = useState(note != null? note.title: 'Untitled');
   const [label, setLabel] = useState(note != null? note.label: null);
+  const [fav, setFav] = useState(note == null? false: note.favorite);
   const [access, setAccess] = useState(null);
   const [noteId, setNoteId] = useState(note != null ? note.id: null);
   const author = useRef(note != null? note.author: localStorage.getItem('username')); // author does not change
@@ -53,21 +58,21 @@ function Edit() {
   const originalAccess = useRef(note != null? (note.private ? 'private': 'public'): 'private') // this is a mere sting value as opposed to access which is an object
   const titleRef = useRef();
   const [openModal, setOpenModal] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   
   useEffect(() => {
     const handlePaste = (event) => {
       event.preventDefault();
       const text = event.clipboardData.getData('text/plain');
       const html = event.clipboardData.getData('text/html');
-      if(text != ''){
-        localStorage.removeItem('copied_note_link')
+      // handle the case for when it is copied from the navbar
+      if(!text.includes('/edit/?note_id=') || (text.includes('/edit/?note_id=') && html != '') ){
         localStorage.removeItem('copied_note_title')
       }
-
-      if (localStorage.getItem('copied_note_link')) {
-            const link = localStorage.getItem('copied_note_link');
+      if (localStorage.getItem('copied_note_title')) {
+            editor.commands.undo() // undo the initial pasting
             const title = localStorage.getItem('copied_note_title');
-            editor.commands.insertContent(`<a href="${link}">${title}</a>`);
+            editor.commands.insertContent(`<a href="${text}">${title}</a>`); // put our own pasted content
       }
     };
 
@@ -76,7 +81,7 @@ function Edit() {
     return () => {
       editor.view.dom.removeEventListener('paste', handlePaste);
     };
-  }, [editor]);
+  }, []);
 
 
   useEffect(()=>{
@@ -113,7 +118,11 @@ const handleContentChange = (newContent)=>{
     }
   }, [saved]);
   
-  
+  const toggleFavourite = async ()=>{
+    await addToFavs(note, !fav);
+    setSaved(true);
+    setFav(!fav);
+  }
   const handleLabelChange = (label)=>{
     setLabel(label);
   }
@@ -131,7 +140,8 @@ const handleContentChange = (newContent)=>{
       brief: brief,
       label: label.title != 'empty'? {...label, labelId:label.id}:null,
       private: access.name == 'private',
-      content: editor.getHTML(),
+      // content: editor.getHTML()
+      content: {html: editor.getHTML(), text: editor.getText()}
     };
     setSaving(true);
     if (noteId != null) {
@@ -143,6 +153,7 @@ const handleContentChange = (newContent)=>{
       data = await fetchData(DOMAIN + `/api/update-note/${noteId}/`, { method: "PATCH", body: note });
       if (data != null) {
         setSaving(false);
+        toast.success('saved successfully'); // may not be required for autosave
         setSaved(true);
         setIsEdited(false);
         setModified(data.modified)
@@ -180,7 +191,7 @@ const handleContentChange = (newContent)=>{
       {(notes != null && notes.length > 0) && 
           <div className="p-2 w-1/4 flex flex-col gap-y-2" style={{scrollbarWidth: 'thin'}}>
             {notes.map((note) => (
-              <Card key={note.id} note={note} />
+              <Card key={note.id} note={note} onChange={()=>{setSaved(true)}} />
             ))}
           </div>
 
@@ -292,7 +303,8 @@ const handleContentChange = (newContent)=>{
                    <button onClick={()=>{setOpenModal(true)}}>
                     <IconShare className="w-5 h-5"/>
                    </button>
-                   <IconStar className="w-5 h-5"/>
+                   {/* ! caution note will be null in some cases below I'll fix that later */}
+                   <IconStar onClick={toggleFavourite} className={`w-5 h-5 cursor-pointer ${note!=null && fav? 'fill-black dark:fill-gray-400': ''}`}/>
                    <IconDots className="w-5 h-5"/>
                 </div>
         </div>

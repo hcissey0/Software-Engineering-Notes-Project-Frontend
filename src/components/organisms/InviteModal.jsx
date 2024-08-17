@@ -1,6 +1,30 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import Badge from '../atoms/Badge';
+import { IconArrowDown, IconCaretDown, IconCaretDownFilled, IconChevronDown, IconX } from '@tabler/icons-react';
+import InviteDropdown from './InviteDropdown';
 
 const InviteModal = ({openModal, setOpenModal}) => {
+  const inputRef = useRef();
+  const [emails, setEmail] = useState([]);
+  const getEmail = () =>{
+    const text = inputRef.current.value;
+    if(text.includes(',')){
+        const currentEmail = text.split(',')[0].trim()
+        inputRef.current.value = '';
+        setEmail([...emails, {email: currentEmail, permission:'Can View'}]);
+        //  console.log([...emails, {email: currentEmail, permission:'Can Read'}]);
+    
+    }
+  };
+
+  const removeEmail = (emailToRemove)=>{
+    setEmail(emails.filter(email => email.email != emailToRemove));
+  };
+
+  const choosePermission = (targetEmail, permission)=>{
+    setEmail(emails.map(email => email.email == targetEmail? {...email, permission: permission}: email));
+  };
+
   return (
         openModal &&
         <div tabindex="-1" aria-hidden="true" className="overflow-hidden flex bg-black/40 fixed top-0 right-0 left-0 z-50 justify-end  w-full md:inset-0 h-full max-h-full">
@@ -20,9 +44,23 @@ const InviteModal = ({openModal, setOpenModal}) => {
                     </button>
                 </div>
                 <div className="p-4 md:p-5 space-y-4">
+                    <div className='flex flex-wrap gap-4'>
+                        {
+                            emails.map((email)=><>
+                            <div className='flex gap-1 relative'>
+                                    <Badge key={email.email} color='blue' text={email.email} cancelButton 
+                                    cancelFunc={()=>{removeEmail(email.email)}}/>
+
+                                    <InviteDropdown choose={choosePermission} email={email.email} permission={email.permission} />
+                                    </div>
+                            </>
+                            )
+                        }
+                    </div>
                     <div className='flex gap-2'>
-                        <input placeholder='Emails separated by commas' type="text" autoFocus className='generalInput' />
-                        <button type="button" 
+                        <input onInput={getEmail} ref={inputRef} placeholder='Enter emails separated by commas' type="text" autoFocus className='generalInput' />
+                        <button
+                        type="button" 
                         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Invite</button>
                 
                     </div>

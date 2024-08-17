@@ -6,7 +6,7 @@ import './Card.css';
 import { Link } from "react-router-dom";
 import { truncateText } from "../../utils/global";
 import Dropdown from "./Dropdown";
-import { IconLock, IconLockOpen } from "@tabler/icons-react";
+import { IconLock, IconLockOpen, IconStar } from "@tabler/icons-react";
 
 
 const Card = ({ note, list = false, addClass='', onChange}) => {
@@ -70,6 +70,9 @@ const Card = ({ note, list = false, addClass='', onChange}) => {
           {note.private? 
            <IconLock className="w-5 h-5"/>: 
            <IconLockOpen className="w-5 h-5"/>
+          }
+          {note.favorite && 
+            <IconStar className="fill-black dark:fill-gray-400 w-5 h-5"/>
           }
           {
             // if there's no label then we don't show the badge

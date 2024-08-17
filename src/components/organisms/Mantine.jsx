@@ -1,5 +1,6 @@
 import { RichTextEditor } from "@mantine/tiptap";
 // ! I noticed that the width and heights of the toolbar and other components are 0 for some reason so they do not display
+// * I fixed that by explicitly passing in icons using react tarble icons
 import {
   IconBold,
   IconClearFormatting,
@@ -18,6 +19,7 @@ import {
 } from "@tabler/icons-react";
 import { MantineProvider } from "@mantine/core";
 import { useEffect, useState } from "react";
+import { BubbleMenu } from "@tiptap/react";
 
 const Mantine = ({ editor, onChange, note }) => {
 
@@ -59,7 +61,7 @@ const Mantine = ({ editor, onChange, note }) => {
     />
   );
   const HightlightIcon = () => (
-    <IconHighlight size={size} className={generalClasses} />
+    <IconHighlight size={size} className={generalClasses + `${editor.isActive("highlight") && iconActive}`} />
   );
   const UnderlineIcon = () => (
     <IconUnderline
@@ -95,13 +97,9 @@ const Mantine = ({ editor, onChange, note }) => {
 
   // styles api: https://mantine.dev/styles/styles-api/
 
-  return (
-    <MantineProvider>
-      <RichTextEditor editor={editor}>
-        {(note == null || note.can_edit) &&
-        <RichTextEditor.Toolbar sticky stickyOffset={60}>
-          {/* A control group is a set of controls inside the toolbar */}
-          <RichTextEditor.ControlsGroup className="mt-2 flex gap-1 me-4">
+const ControlGroups = ()=> (<>
+ {/* A control group is a set of controls inside the toolbar */}
+ <RichTextEditor.ControlsGroup className="flex gap-1">
             <RichTextEditor.Bold icon={BoldIcon} />
             <RichTextEditor.Italic icon={ItalicIcon} />
             <RichTextEditor.Underline icon={UnderlineIcon} />
@@ -111,7 +109,7 @@ const Mantine = ({ editor, onChange, note }) => {
             {/* <RichTextEditor.CodeBlock icon={CodeIcon} /> */}
           </RichTextEditor.ControlsGroup>
 
-          <RichTextEditor.ControlsGroup className="relative mt-2 flex gap-1 rounded-md me-2">
+          <RichTextEditor.ControlsGroup className="relative flex gap-1">
             <RichTextEditor.Link icon={LinkIcon} />
             <RichTextEditor.Unlink icon={UnlinkIcon} />
             <RichTextEditor.BulletList icon={BulletListIcon} />
@@ -119,7 +117,20 @@ const Mantine = ({ editor, onChange, note }) => {
             <RichTextEditor.Undo icon={UndoIcon} />
             <RichTextEditor.Redo icon={RedoIcon} />
           </RichTextEditor.ControlsGroup>
+</>);
+
+  return (
+    <MantineProvider>
+      <RichTextEditor editor={editor}>
+        {(note == null || note.can_edit) && <>
+        <RichTextEditor.Toolbar className="flex gap-4">
+          <ControlGroups/>
         </RichTextEditor.Toolbar>
+
+        <BubbleMenu editor={editor} className="bg-white shadow-lg rounded dark:bg-gray-900 flex gap-4 px-1 py-2">
+          <ControlGroups/>
+        </BubbleMenu>
+        </>
         }
 
         <RichTextEditor.Content className="mt-2 bg-white dark:bg-gray-700 dark:border-gray-600 min-h-20 w-full p-2 rounded-md" />

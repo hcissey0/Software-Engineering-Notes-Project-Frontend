@@ -47,7 +47,7 @@ body {
 }
 
 .mantine-RichTextEditor-linkEditor{
-    @apply absolute right-80 flex items-center shadow-md border-sky-500 gap-2 top-40 bg-white dark:bg-gray-800 rounded-md p-2;
+    @apply fixed right-80 flex items-center shadow-md border-sky-500 gap-2 top-40 bg-white dark:bg-gray-800 rounded-md p-2;
 }
 
 
@@ -61,6 +61,6 @@ body {
 
 @layer components{
     .generalInput{
-        @apply bg-gray-50 border border-transparent rounded-sm text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+        @apply bg-gray-50 border border-gray-200 rounded-sm text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
     }
 }

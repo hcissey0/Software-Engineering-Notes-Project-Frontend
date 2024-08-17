@@ -1,4 +1,4 @@
-import { IconTrash, IconLink } from '@tabler/icons-react';
+import { IconTrash, IconLink, IconStar } from '@tabler/icons-react';
 import React from 'react'
 import { useState, useRef, useEffect } from 'react';
 import LabelDropdown from './LabelDropdown'
@@ -7,6 +7,13 @@ import toast, { Toaster } from 'react-hot-toast';
 import { fetchData } from '../../utils/jsonServer';
 import Spinner from './Spinner';
 
+export const addToFavs = async (note, add)=>{
+  const data = await fetchData(DOMAIN + `/api/update-note/${note.id}/`, { method: "PATCH", body: {favorite:add, label:{...note.label, labelId:note.label.id}} });
+  if(data != null){
+    toast.success(add? 'Added to favourites': 'Removed from favourites')
+  }
+ };
+
 // * You must make a parent component of the dropdown position relative
 const Dropdown = ({ note , onChange }) => {
     const noteId = note.id; 
@@ -14,6 +21,7 @@ const Dropdown = ({ note , onChange }) => {
     const [loading, setLoading] = useState(false);
     const dropdownRef = useRef();
   
+
     const handleClickOutside = (e)=>{
       //  console.log(e.target);
       if(dropdownRef.current && !dropdownRef.current.contains(e.target)){
@@ -33,10 +41,9 @@ const Dropdown = ({ note , onChange }) => {
 
 
     const copyLink = async() => {
-      localStorage.setItem('copied_note_link', `${FRONTEND_DOMAIN}/edit/?note_id=${noteId}`);
       localStorage.setItem('copied_note_title', note.title);
-      await navigator.clipboard.writeText('');
-      toast.success("Link copied to clipboard");
+      await navigator.clipboard.writeText(`${FRONTEND_DOMAIN}/edit/?note_id=${noteId}`);
+      toast.success("Link copied to clipboard")
       // console.log("link copied to clipboard")
     }
   
@@ -49,7 +56,6 @@ const Dropdown = ({ note , onChange }) => {
 
   return (
     <>   
-        <Toaster/> 
         <div ref={dropdownRef}>
           <button
             // id={note.id}
@@ -81,6 +87,13 @@ const Dropdown = ({ note , onChange }) => {
               <a href="#" className="block dark:hover:text-white">Delete</a>
           </li>
         }
+
+        <li
+        onClick={async()=>{await addToFavs(note, true); onChange()}} 
+        className='flex items-center px-4 py-2 gap-2 hover:bg-gray-100 dark:hover:bg-slate-800'>
+          <IconStar className='h-5 w-5'/>
+          <a href="#" className="block dark:hover:text-white">Star</a>
+        </li>
          {loading && 
          
           <li className='flex justify-center p-2'>

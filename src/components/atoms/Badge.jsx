@@ -1,3 +1,4 @@
+import { IconX } from '@tabler/icons-react';
 import React from 'react'
 
 // ! the following classes below are to help tailwind compile the css for them 
@@ -24,13 +25,20 @@ const Badge = ({
     color='blue',
     text='default',
     size='sm',
-    rounded=false
+    rounded=false,
+    cancelButton=false,
+    cancelFunc
 }) => {
   
     // if (size === 'sm') {
         return (
-          <span className={`bg-${color}-100 text-${color}-800 dark:text-black text-nowrap text-xs max-w-full truncate font-medium me-2 px-2.5 py-0.5 rounded${rounded ? '-full': ''} dark:bg-${color}-400`}>
+          <span className={`inline-flex items-center bg-${color}-100 text-${color}-800 dark:text-black text-nowrap text-xs max-w-full truncate font-medium me-2 px-2.5 py-0.5 rounded${rounded ? '-full': ''} dark:bg-${color}-400`}>
               {text}
+              {cancelButton && 
+              <button onClick={cancelFunc}>
+                  <IconX className='w-5 h-5'/>
+              </button>
+              }
           </span>
         )
     // }

@@ -8,13 +8,16 @@ import Avatar from "../atoms/Avatar";
 import { ErrorBoundary } from "../../ErrorBoundary";
 import ErrorPage from "./Error";
 import LabelSettings from "../organisms/LabelSettings";
-import { IconSettings } from "@tabler/icons-react";
+import { IconBell, IconMessage, IconSearch, IconSettings } from "@tabler/icons-react";
 import Modal from "../organisms/Modal";
-import Favourites from "../organisms/Favourites";
+import Favourites from "../organisms/Favourites" 
+import SearchModal from "../organisms/searchModal";
+import { Toaster } from "react-hot-toast";
 
 // eslint-disable-next-line react/prop-types
 const Layout = () => {
   const [openModal, setOpenModal] = useState(false); 
+  const [openSearchModal, setOpenSearchModal] = useState(false); 
 
   return (
     <ErrorBoundary fallback={<ErrorPage />}>
@@ -53,9 +56,9 @@ const Layout = () => {
                 </span>
               </Link>
             </div>
-            <div className="">
+            {/* <div className="">
               <SearchBox />
-            </div>
+            </div> */}
             <div className="flex items-center">
               <ThemeToggle />
               <Avatar />
@@ -84,6 +87,26 @@ const Layout = () => {
                   <span className="ms-3 whitespace-nowrap">Settings</span>
                 </button>
               </li>
+              
+              <li>
+              <button
+                 onClick={()=>{setOpenSearchModal(true)}}
+                  className="flex items-center p-2 w-full  text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                > 
+                  <IconSearch/>
+                  <span className="ms-3 whitespace-nowrap">Search</span>
+                </button>
+              </li>
+
+              <li>
+                <button
+                  className="flex items-center p-2 w-full  text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                > 
+                   <IconMessage className="dark:stroke-gray-400"/>
+                  <span className="ms-3 whitespace-nowrap">Invites</span>
+                </button>
+              </li>
+            
               {/* <li>
                 <a
                   href="#"
@@ -162,6 +185,8 @@ const Layout = () => {
       <div className="mt-[71px] sm:ml-52">
         <Outlet />
       <Modal openModal={openModal} setOpenModal={setOpenModal}/>
+      <SearchModal openModal={openSearchModal} setOpenModal={setOpenSearchModal}/>
+      <Toaster/>
       </div>
     </ErrorBoundary>
   );

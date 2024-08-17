@@ -6,7 +6,7 @@ import { fromServers } from "../../utils/jsonServer";
 import { placeholderCards } from "../organisms/CardSkeleton";
 import { DOMAIN, JSON_DOMAIN } from "../../utils/global";
 import { Link } from "react-router-dom";
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 
 const Home = () => {
@@ -157,8 +157,6 @@ const Home = () => {
           <Card key={note.id} note={note} list={displayMode === "list"} />
         ))}
       </div> */}
-      <Toaster />
-
 
       {(notes!= null && notes.length > 0) && 
         <div className="cards w-full">

@@ -59,7 +59,7 @@ const AccessDropdown = ({ note, onChange}) => {
           <div id="dropdown" className="z-10 bg-white divide-y divide-gray-100 absolute left-4 top-8 rounded-md shadow-lg w-44 dark:bg-gray-700">
             <ul className="p-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
               {accessChoices.map((access, index) => (
-                <li key={index} className="mb-2 hover:bg-gray-100 cursor-pointer p-1 flex justify-between" onClick={()=>{setChosen(access)}}>
+                <li key={index} className="mb-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer p-1 flex justify-between" onClick={()=>{setChosen(access)}}>
                   <Badge rounded text={access.name} color={access.color} />
                   {chosen.name == access.name && (
                     <div>

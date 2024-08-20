@@ -26,11 +26,8 @@ const Home = () => {
       const func = async ()=>{
         const usernotes = await fromServers([DOMAIN + `/api/get-notes/?username=${localStorage.getItem('get_notes_for')}`, JSON_DOMAIN + '/get-notes/'], {auth:true}); // remove auth for when using json server (json server doesn't accept authorization)
         if (usernotes != null)
-          // Farouq kraa you dey pri too much: the logic for handling note visibility will be done in the backend. I already have that code ready
-           // what if someone has read access or write access ?
-           // just leave the Access dropdown to me 
           if (localStorage.getItem('username') != localStorage.getItem('get_notes_for'))
-            setNotes(usernotes.filter(note => !(note.private)));
+            setNotes(usernotes.filter(note => !(note.private) || note.can_read));
           else
             setNotes(usernotes);
       };

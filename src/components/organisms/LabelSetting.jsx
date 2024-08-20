@@ -82,7 +82,7 @@ const LabelSetting = ({label, onChange}) => {
                   <li
                   onClick={()=>{chooseColor(color)}} 
                   key={color} className='flex items-center px-4 py-2 gap-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700'>
-                      <div className={`w-5 aspect-square rounded-full bg-${color}-100 dark:bg-${color}-400`}>
+                      <div className={`w-5 aspect-square rounded-full bg-${color}-400 dark:bg-${color}-400`}>
                       </div>
 
                       <div className='flex w-full justify-between items-center'>

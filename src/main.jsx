@@ -8,12 +8,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Layout from './components/pages/Layout.jsx'
 import Home from './components/pages/Home.jsx'
 import Login from './components/pages/Login.jsx'
-import { loginAction, signupAction } from './utils/actions.js'
+import { loginAction, signupAction} from './utils/actions.js'
 import Edit from './components/pages/Edit.jsx'
 import Profile from './components/pages/Profile.jsx'
 import Signup from './components/pages/Signup.jsx'
 import { editLoader, homeLoader } from './utils/loaders.js'
 import { indexLoader } from './utils/loaders.js'
+import ChangePictureModal from './components/organisms/ChangePictureModal.jsx'
 // routes for the application
 const router = createBrowserRouter(
   [

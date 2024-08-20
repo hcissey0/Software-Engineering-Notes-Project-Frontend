@@ -8,16 +8,19 @@ import Avatar from "../atoms/Avatar";
 import { ErrorBoundary } from "../../ErrorBoundary";
 import ErrorPage from "./Error";
 import LabelSettings from "../organisms/LabelSettings";
-import { IconBell, IconMessage, IconSearch, IconSettings } from "@tabler/icons-react";
+import { IconBell, IconInbox, IconMessage, IconSearch, IconSettings } from "@tabler/icons-react";
 import Modal from "../organisms/Modal";
 import Favourites from "../organisms/Favourites" 
 import SearchModal from "../organisms/searchModal";
 import { Toaster } from "react-hot-toast";
+import InviteModal2 from "../organisms/InviteModal2";
 
 // eslint-disable-next-line react/prop-types
 const Layout = () => {
   const [openModal, setOpenModal] = useState(false); 
   const [openSearchModal, setOpenSearchModal] = useState(false); 
+  const [openInvites, setOpenInvites] = useState(false); 
+  const [refresh, setRefresh] = useState(false); 
 
   return (
     <ErrorBoundary fallback={<ErrorPage />}>
@@ -100,9 +103,15 @@ const Layout = () => {
 
               <li>
                 <button
+                 onClick={()=>{setOpenInvites(true)}}
                   className="flex items-center p-2 w-full  text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                > 
-                   <IconMessage className="dark:stroke-gray-400"/>
+                >   
+                   <div className="relative">
+                    <IconInbox className="dark:stroke-gray-400"/>
+                    {localStorage.getItem('invite_count') > 0 && 
+                    <span class="-top-1 -right-1  absolute w-3.5 h-3.5 bg-violet-500 border-2 border-white dark:border-gray-800 rounded-full"></span>
+                    }
+                   </div>
                   <span className="ms-3 whitespace-nowrap">Invites</span>
                 </button>
               </li>
@@ -186,6 +195,7 @@ const Layout = () => {
         <Outlet />
       <Modal openModal={openModal} setOpenModal={setOpenModal}/>
       <SearchModal openModal={openSearchModal} setOpenModal={setOpenSearchModal}/>
+      <InviteModal2 openModal={openInvites} setOpenModal={setOpenInvites} refreshValue={refresh} refreshFunc={setRefresh}/>
       <Toaster/>
       </div>
     </ErrorBoundary>

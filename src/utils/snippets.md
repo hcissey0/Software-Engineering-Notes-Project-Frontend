@@ -316,3 +316,99 @@ function App() {
 
 export default App;
 ```
+
+You can use `URL.createObjectURL` to achieve the same result. Here's an example:
+
+### HTML
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Preview</title>
+</head>
+<body>
+    <input type="file" id="file-input" accept="image/*">
+    <div id="image-preview"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+### JavaScript (script.js)
+```javascript
+document.getElementById('file-input').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.style.maxWidth = '100%'; // Adjust as needed
+        const preview = document.getElementById('image-preview');
+        preview.innerHTML = ''; // Clear any previous images
+        preview.appendChild(img);
+
+        // Revoke the object URL after the image is loaded
+        img.onload = function() {
+            URL.revokeObjectURL(img.src);
+        };
+    }
+});
+```
+
+### Explanation
+1. **HTML**: Same as before, with a file input and a `div` for the image preview.
+2. **JavaScript**:
+   - An event listener is added to the file input to detect changes.
+   - When a file is selected, an `img` element is created.
+   - The `src` attribute of the `img` element is set to the object URL created from the file using `URL.createObjectURL`.
+   - The image is appended to the `div` with the ID `image-preview`.
+   - The object URL is revoked after the image is loaded to free up memory.
+
+  Here's how you can implement the image preview functionality in React:
+
+### App.js
+```javascript
+import React, { useState } from 'react';
+
+function App() {
+    const [imageSrc, setImageSrc] = useState(null);
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            setImageSrc(objectUrl);
+
+            // Revoke the object URL after the image is loaded
+            return () => URL.revokeObjectURL(objectUrl);
+        }
+    };
+
+    return (
+        <div>
+            <input type="file" accept="image/*" onChange={handleImageChange} />
+            <div id="image-preview">
+                {imageSrc && <img src={imageSrc} alt="Preview" style={{ maxWidth: '100%' }} />}
+            </div>
+        </div>
+    );
+}
+
+export default App;
+```
+
+### Explanation
+1. **State Management**: We use the `useState` hook to manage the state of the image source (`imageSrc`).
+2. **Event Handling**: The `handleImageChange` function handles the file input change event. It creates an object URL for the selected file and updates the state with this URL.
+3. **Image Display**: If `imageSrc` is not `null`, an `img` element is rendered with the `src` attribute set to the object URL.
+4. **Memory Management**: The object URL is revoked after the image is loaded to free up memory.
+
+This React implementation ensures efficient memory usage and provides a responsive way to preview images. If you have any further questions or need additional features, feel free to ask!
+
+This method is efficient and avoids the need to read the file into memory as a data URL.
+If you don't revoke the object URL created with `URL.createObjectURL`, the browser will keep the reference to the file in memory. This can lead to memory leaks, especially if you create many object URLs without revoking them. Over time, this can degrade the performance of your application and consume unnecessary memory resources.
+
+Releasing the object URL with `URL.revokeObjectURL` helps to free up memory and ensures that your application runs efficiently. It's a good practice to revoke the URL once you no longer need it, such as after the image has been loaded.
+
+If you have any more questions or need further clarification, feel free to ask!

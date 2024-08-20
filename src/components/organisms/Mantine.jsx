@@ -5,6 +5,7 @@ import {
   IconBold,
   IconClearFormatting,
   IconCode,
+  IconH1,
   IconHighlight,
   IconItalic,
   IconLink,
@@ -95,6 +96,8 @@ const Mantine = ({ editor, onChange, note }) => {
     <IconRotateClockwise size={size} className={generalClasses} />
   );
 
+  const H1Icon = ()=> <IconH1 size={size} className={generalClasses + `${editor.isActive("heading1") && iconActive}`}/>
+
   // styles api: https://mantine.dev/styles/styles-api/
 
 const ControlGroups = ()=> (<>
@@ -117,6 +120,14 @@ const ControlGroups = ()=> (<>
             <RichTextEditor.Undo icon={UndoIcon} />
             <RichTextEditor.Redo icon={RedoIcon} />
           </RichTextEditor.ControlsGroup>
+
+           {/* must fix the control group for h tags elements */}
+          {/* <RichTextEditor.ControlsGroup  className="flex gap-1">
+          <RichTextEditor.H1 icon={H1Icon} />
+          <RichTextEditor.H2 />
+          <RichTextEditor.H3 />
+          <RichTextEditor.H4 />
+        </RichTextEditor.ControlsGroup> */}
 </>);
 
   return (

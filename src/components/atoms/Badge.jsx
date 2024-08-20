@@ -8,6 +8,12 @@ bg-green-100 bg-blue-100 bg-orange-100
 bg-pink-100 bg-indigo-100 bg-purple-100 
 bg-red-100 bg-yellow-100 bg-stone-100 bg-sky-100
 
+additional bg for testing
+
+bg-green-400 bg-blue-400 bg-orange-400 
+bg-pink-400 bg-indigo-400 bg-purple-400 
+bg-red-400 bg-yellow-400 bg-stone-400 bg-sky-400
+
 dark styles
 
 dark:bg-green-400 dark:bg-blue-400 dark:bg-orange-400 
@@ -18,7 +24,7 @@ text-green-800 text-blue-800 text-orange-800
 text-pink-800 text-indigo-800 text-purple-800
 text-red-800 text-yellow-800 text-stone-800 text-sky-800
 
-
+text-nowrap
 `
  
 const Badge = ({

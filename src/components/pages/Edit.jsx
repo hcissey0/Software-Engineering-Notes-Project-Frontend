@@ -108,7 +108,7 @@ const handleContentChange = (newContent)=>{
       const notes = await fetchData(DOMAIN + `/api/get-notes/?username=${author.current}`, { auth: true });
       if (notes != null)
         if (localStorage.getItem('username') != localStorage.getItem('get_notes_for'))
-          setNotes(notes.filter(note => !(note.private)));
+          setNotes(notes.filter(note => !(note.private) || note.can_read));
         else
           setNotes(notes);
     };
@@ -174,7 +174,7 @@ const handleContentChange = (newContent)=>{
 
   return (
     <>
-     <InviteModal openModal={openModal} setOpenModal={setOpenModal} />
+     <InviteModal openModal={openModal} setOpenModal={setOpenModal} note={note} />
      <div className='edit-container gap-4 items-start'>
       {notes == null &&
         <div className='p-2 w-1/4 flex flex-col gap-y-2'>
@@ -292,13 +292,13 @@ const handleContentChange = (newContent)=>{
               )}
         </div>
 
-        <div>
+        <div className="absolute right-8">
                 <div className="flex gap-3">
-                  {/* {modified != null &&
+                  {modified != null &&
                     <div className="text-sm">
                        <span className="text-nowrap">Edited {moment(modified).fromNow()}</span>
                     </div>
-                  } */}
+                  }
                   
                    <button onClick={()=>{setOpenModal(true)}}>
                     <IconShare className="w-5 h-5"/>
@@ -307,6 +307,15 @@ const handleContentChange = (newContent)=>{
                    <IconStar onClick={toggleFavourite} className={`w-5 h-5 cursor-pointer ${note!=null && fav? 'fill-black dark:fill-gray-400': ''}`}/>
                    <IconDots className="w-5 h-5"/>
                 </div>
+                {note != null && 
+                
+                <div class="flex -space-x-4 rtl:space-x-reverse mt-4">
+                  <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+                  <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" src="https://flowbite.com/docs/images/people/profile-picture-4.jpg" alt=""/>
+                  <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" src="https://flowbite.com/docs/images/people/profile-picture-3.jpg" alt=""/>
+                  <a class="flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800" href="#">+4</a>
+                </div>
+                }
         </div>
         </div>
 

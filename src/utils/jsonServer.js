@@ -3,7 +3,7 @@ import { getAccessToken } from "./loaders";
 // ! Run json server first on port 3000 (This is the default port anyway)
 // * All sample data in api.json is an actual representation of how data looks like from the actual server
 
-export const fetchData = async(url, {method='GET', body, auth=false, headers={}, returnResponse=false})=>{
+export const fetchData = async(url, {method='GET', body, auth=false, headers={}, returnResponse=false, formData=false})=>{
   let options = {
       method:method,
       headers: headers
@@ -14,8 +14,8 @@ export const fetchData = async(url, {method='GET', body, auth=false, headers={},
   }
 
   if(method == 'POST' || method == 'PATCH'){
-     options.body = JSON.stringify(body); 
-     options.headers['Content-Type'] = 'application/json';
+     options.body = formData? body: JSON.stringify(body); 
+     if(!formData)options.headers['Content-Type'] =  'application/json';
   }
 
   try {
@@ -39,3 +39,4 @@ export const fetchData = async(url, {method='GET', body, auth=false, headers={},
   // could not fetch the resource from any of the domains
   return null;
   };
+

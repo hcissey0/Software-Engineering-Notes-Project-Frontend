@@ -2,16 +2,34 @@ import React, { useEffect, useRef, useState } from 'react'
 import Badge from '../atoms/Badge';
 import { IconArrowDown, IconCaretDown, IconCaretDownFilled, IconChevronDown, IconX } from '@tabler/icons-react';
 import InviteDropdown from './InviteDropdown';
+import { fetchData } from '../../utils/jsonServer';
+import { DOMAIN } from '../../utils/global';
+import toast from 'react-hot-toast';
 
-const InviteModal = ({openModal, setOpenModal}) => {
+const InviteModal = ({openModal, setOpenModal, note}) => {
   const inputRef = useRef();
   const [emails, setEmail] = useState([]);
+ 
+  const sendInvite = async()=>{
+    const data = await fetchData(DOMAIN + `/api/invites/`, {method: 'POST', body: emails});
+    if(data != null){
+        const emailsFound = data.emails_found; 
+        const emailsNotFound = data.emails_not_found;
+        emailsFound.forEach(email => {
+            toast.success('invite sent to ' + email);
+        });
+        emailsNotFound.forEach(email => {
+            toast.error(email + ' not found');
+        });
+    }
+  };
+
   const getEmail = () =>{
     const text = inputRef.current.value;
     if(text.includes(',')){
         const currentEmail = text.split(',')[0].trim()
         inputRef.current.value = '';
-        setEmail([...emails, {email: currentEmail, permission:'Can View'}]);
+        setEmail([...emails, {email: currentEmail, permission:'Can View', 'note_title': note.title, 'note_id': note.id, sender:localStorage.getItem('username')}]);
         //  console.log([...emails, {email: currentEmail, permission:'Can Read'}]);
     
     }
@@ -60,6 +78,7 @@ const InviteModal = ({openModal, setOpenModal}) => {
                     <div className='flex gap-2'>
                         <input onInput={getEmail} ref={inputRef} placeholder='Enter emails separated by commas' type="text" autoFocus className='generalInput' />
                         <button
+                        onClick={sendInvite}
                         type="button" 
                         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Invite</button>
                 

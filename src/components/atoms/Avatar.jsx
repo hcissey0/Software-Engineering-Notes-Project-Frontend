@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import AvatarSkeleton from './AvatarSkeleton';
 import { Link } from "react-router-dom";
 import { signOut } from '../../utils/actions';
+import ChangePictureModal from '../organisms/ChangePictureModal';
+import { DOMAIN } from '../../utils/global';
 // import {profileImage} from '../../components/pages/Profile';
 
 const Avatar = () => {
@@ -9,13 +11,20 @@ const Avatar = () => {
   const [hidden, setHidden] = useState(true);
   const dropdownRef = useRef();
   const [right, setRight] = useState('right-0');
+  const [openModal, setOpenModal] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   
     const getImage = async()=>{
-      const response = await fetch('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80');
+      let defaultUrl = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
+      const url = localStorage.getItem('profile_pic_url')
+      if(url != 'null' )defaultUrl = DOMAIN + url; 
+      const response = await fetch(defaultUrl);
       const blob = await response.blob(); 
       // console.log(blob);
       setUrl(URL.createObjectURL(blob));
     };
+
+   
   //  * For creating adjustable dropdown behaviour. 
   //  * Typically not needed now: I can directly set right-0 on the avatar dropdown for now to prevent an overflow
   //   useEffect(()=>{
@@ -44,9 +53,10 @@ const Avatar = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside); //  we have to remove the event listener when the element unmounts
     };
-  }, [])
+  }, [refresh])
   return (
     <>
+    <ChangePictureModal openModal={openModal} setOpenModal={setOpenModal} refreshValue={refresh} refreshFunc={setRefresh}/>
     {url &&
         <div ref={dropdownRef} className="flex items-center ms-3 relative">
         <div>
@@ -60,7 +70,7 @@ const Avatar = () => {
             <span className="sr-only">Open user menu</span>
             <img
               id="profileImage"
-              className="min-w-8 h-8 rounded-full"
+              className="w-8 h-8 rounded-full"
               src={url}
               alt="user photo"
             />
@@ -86,14 +96,13 @@ const Avatar = () => {
           </p>
         </div>
         <ul className="py-1" role="none">
-          <li>
-            <a
-              href="/Profile"
+          <li onClick={()=>{setOpenModal(true)}} className='cursor-pointer'>
+            <p
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
               role="menuitem"
             >
-              Go to profile
-            </a>
+              Change picture
+            </p>
           </li>
         </ul>
         <ul className="py-1" role="none">

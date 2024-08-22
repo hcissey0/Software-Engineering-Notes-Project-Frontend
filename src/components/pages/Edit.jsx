@@ -307,7 +307,7 @@ const handleContentChange = (newContent)=>{
                    <IconStar onClick={toggleFavourite} className={`w-5 h-5 cursor-pointer ${note!=null && fav? 'fill-black dark:fill-gray-400': ''}`}/>
                    <IconDots className="w-5 h-5"/>
                 </div>
-                {note != null && 
+{/*                 {note != null && 
                 
                 <div class="flex -space-x-4 rtl:space-x-reverse mt-4">
                   <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
@@ -315,7 +315,7 @@ const handleContentChange = (newContent)=>{
                   <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" src="https://flowbite.com/docs/images/people/profile-picture-3.jpg" alt=""/>
                   <a class="flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800" href="#">+4</a>
                 </div>
-                }
+                } */}
         </div>
         </div>
 

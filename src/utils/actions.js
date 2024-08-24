@@ -1,5 +1,5 @@
 import { redirect } from "react-router-dom";
-import { DOMAIN } from "./global";
+import { DOMAIN, useSetting } from "./global";
 import { fetchData } from "./jsonServer";
 import toast from "react-hot-toast";
 
@@ -19,15 +19,14 @@ export const loginAction = async ({ request }) => {
       localStorage.setItem("username", data.user.username); // store the username
       localStorage.setItem("email", data.user.email); // store the username
       localStorage.setItem("profile_pic_url", data.user.profile_pic_url); // store the username
+      localStorage.setItem("settings", JSON.stringify(data.settings))
       toast.success("Login successful!");
       return redirect("/" + data.user.username);
     } else {
       toast.error("Invalid username or password"); // show an error message if the user does not exist
     }
   }
-  // handle the case for when the user does not exist
-  // create a UI component that shows an error message
-  return redirect("");
+  return redirect(""); // redirect to the same page
 };
 
 // * processes the signup data
@@ -57,10 +56,10 @@ export const signupAction = async ({ request }) => {
 
 // logs out the user
 export const signOut = () => {
-  localStorage.removeItem("user_access_token"); // store it in local storage
-  localStorage.removeItem("user_refresh_token"); // store it in local storage
-  localStorage.removeItem("username"); // store the username
-  localStorage.removeItem("email"); // store the username
-  localStorage.removeItem("profile_pic_url"); // store the username
+  const colorTheme = localStorage.getItem('color-theme');
+  const lastVisited = localStorage.getItem('last_visited');
+  localStorage.clear();  
+  localStorage.setItem('color-theme', colorTheme);
+  localStorage.setItem('last_visited', lastVisited);
   window.location.href = "/login";
 };

@@ -6,7 +6,6 @@ import { fromServers } from "../../utils/jsonServer";
 import { placeholderCards } from "../organisms/CardSkeleton";
 import { DOMAIN, JSON_DOMAIN } from "../../utils/global";
 import { Link } from "react-router-dom";
-import toast from 'react-hot-toast';
 
 
 const Home = () => {
@@ -16,6 +15,15 @@ const Home = () => {
   const [notes, setNotes] = useState(null);
   const [refresh, setRefresh] = useState(false); // just to refresh the page whenever change happens
 
+  const getNotes = async ()=>{
+    const usernotes = await fromServers([DOMAIN + `/api/get-notes/?username=${localStorage.getItem('get_notes_for')}`, JSON_DOMAIN + '/get-notes/'], {auth:true}); // remove auth for when using json server (json server doesn't accept authorization)
+    if (usernotes != null)
+      if (localStorage.getItem('username') != localStorage.getItem('get_notes_for'))
+        setNotes(usernotes.filter(note => !(note.private) || note.can_read));
+      else
+        setNotes(usernotes);
+  };
+
   // get all notes
   useEffect(() => {
         /*
@@ -23,15 +31,7 @@ const Home = () => {
           The home loader will completely fetch all data before the page loads which is not desirable to us at this moment
           I'm using the home loader to check authentication instead to prevent the page from loading if the user is not authenticated
         */ 
-      const func = async ()=>{
-        const usernotes = await fromServers([DOMAIN + `/api/get-notes/?username=${localStorage.getItem('get_notes_for')}`, JSON_DOMAIN + '/get-notes/'], {auth:true}); // remove auth for when using json server (json server doesn't accept authorization)
-        if (usernotes != null)
-          if (localStorage.getItem('username') != localStorage.getItem('get_notes_for'))
-            setNotes(usernotes.filter(note => !(note.private) || note.can_read));
-          else
-            setNotes(usernotes);
-      };
-      func();
+      getNotes();
   }, [refresh]);
 
   const handleDisplayMode = (e) => {

@@ -3,7 +3,7 @@ import Badge from "../atoms/Badge";
 import { useState, useRef, useEffect } from "react";
 import { IconCheck, IconLock, IconLockOpen } from "@tabler/icons-react";
 import { fetchData } from "../../utils/jsonServer";
-import { DOMAIN } from "../../utils/global";
+import { DOMAIN, isOwner } from "../../utils/global";
 
 const AccessDropdown = ({ note, onChange}) => {
   const accessChoices = [
@@ -20,7 +20,7 @@ const AccessDropdown = ({ note, onChange}) => {
  
 
   const handleClick = () => {
-    if(note != null && !note.can_edit)return;
+    if(note != null && !isOwner())return;
     setOpen(!open);
   };
 

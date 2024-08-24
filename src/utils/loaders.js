@@ -1,5 +1,5 @@
 import { redirect } from "react-router-dom";
-import { DOMAIN } from "./global";
+import { DOMAIN, saveLastVisited, useSetting } from "./global";
 import { fetchData } from "./jsonServer";
 import { lazy } from "react";
 
@@ -39,7 +39,6 @@ export const homeLoader = async ({params}) =>{
     if(response != null && !response.ok)return redirect('/test');
     setAuthentication(false); // assume user is not authenticated yet
     if(!await userIsAuthenticated())return redirect('/login');
-
     setAuthentication(true); 
     localStorage.setItem('get_notes_for', username);
     return null;

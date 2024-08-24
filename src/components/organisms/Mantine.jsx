@@ -12,7 +12,6 @@ import {
   IconList,
   IconListNumbers,
   IconRotate,
-  IconRotate2,
   IconRotateClockwise,
   IconStrikethrough,
   IconUnderline,

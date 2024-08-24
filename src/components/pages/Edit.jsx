@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import "react-quill/dist/quill.snow.css";
 import Card from "../organisms/Card";
 import "./edit.css";
-import { DOMAIN, FRONTEND_DOMAIN} from "../../utils/global";
+import { debounce, DOMAIN, FRONTEND_DOMAIN, isOwner, saveLastVisited, useSetting} from "../../utils/global";
 import { truncateText } from "../../utils/global";
 import { useLoaderData } from "react-router-dom";
 import { fetchData } from "../../utils/jsonServer";
@@ -24,8 +24,9 @@ import { addToFavs } from "../organisms/Dropdown";
 import Highlight from "@tiptap/extension-highlight";
 import toast from "react-hot-toast";
 
+
 function Edit() {
-  const note = useLoaderData();
+  const [note, setNote] = useState(useLoaderData());
 
   const editor = useEditor({
     extensions: [
@@ -59,8 +60,11 @@ function Edit() {
   const titleRef = useRef();
   const [openModal, setOpenModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const autoSave = useRef();
+  
   
   useEffect(() => {
+    saveLastVisited();
     const handlePaste = (event) => {
       event.preventDefault();
       const text = event.clipboardData.getData('text/plain');
@@ -83,19 +87,74 @@ function Edit() {
     };
   }, []);
 
+  const handleSave = async () => {
+    let data;
+    const brief = truncateText(editor.getText());
+    const note = {
+      author: author.current,
+      title: titleRef.current.innerText || "Untitled",
+      brief: brief,
+      label: (label != null && label.title != 'empty')? {...label, labelId:label.id}:null,
+      private: access != null? access.name == 'private': true,
+      // content: editor.getHTML()
+      content: {html: editor.getHTML(), text: editor.getText()}
+    };
+    setSaving(true);
+    console.log('the note id is', noteId);
+    
+    if (noteId != null) {
+      // if the noteId is not null it means the note already exists an so we just update it
+      // console.log('this note already exists');
+      // console.log(note);
+      // data = await fetchData(DOMAIN + `/api/test/`, { method: "POST", body: note });
+      // return;
+      data = await fetchData(DOMAIN + `/api/update-note/${noteId}/`, { method: "PATCH", body: note });
+      if (data != null) {
+        setSaving(false);
+        toast.success('saved successfully'); // may not be required for autosave
+        setSaved(true);
+        setIsEdited(false);
+        setModified(data.modified)
+        originalContent.current = data.content;
+        originalLabel.current = data.label;
+        originalAccess.current = data.private? 'private': 'public';
+      }
+    } else {
+      // create a new note
+      data = await fetchData(DOMAIN + "/api/create-note/", { method: "POST", body: note });
+      if (data != null) {
+        setNoteId(data.id); // set note id to the current note
+        setSaving(false);
+        setSaved(true);
+      }
+    }
+  };
+ 
+  useEffect(()=>{
+    autoSave.current = debounce(handleSave, 800) // this debounced function should only be created once
+  }, []);
 
   useEffect(()=>{
     if(note != null)
       {  
         if(label != null && access != null){
-          console.log(originalAccess.current);
+          // console.log(originalAccess.current);
           setIsEdited(content != originalContent.current || label.id != originalLabel.current.id || access.name != originalAccess.current);
         }
         else{
           setIsEdited(content != originalContent.current);
         }
-      }
-  }, [content, label, access])
+      }  
+      // ! There's a bug with the autosaving I don't want problems now will fix lateer.
+      // console.log('something has changed')    
+      // if(useSetting('autosave')){
+      //   const func = async()=>{
+      //     await (autoSave.current)(); //
+      //   }
+      //   func();
+      // }
+        
+    }, [content, label, access])
 
 
 const handleContentChange = (newContent)=>{
@@ -126,51 +185,13 @@ const handleContentChange = (newContent)=>{
   const handleLabelChange = (label)=>{
     setLabel(label);
   }
-
+  
   const handleAccessChange = (access)=>{
     setAccess(access)
   }
 
-  const handleSave = async () => {
-    let data;
-    const brief = truncateText(editor.getText());
-    const note = {
-      author: author.current,
-      title: titleRef.current.innerText || "Untitled",
-      brief: brief,
-      label: label.title != 'empty'? {...label, labelId:label.id}:null,
-      private: access.name == 'private',
-      // content: editor.getHTML()
-      content: {html: editor.getHTML(), text: editor.getText()}
-    };
-    setSaving(true);
-    if (noteId != null) {
-      // if the noteId is not null it means the note already exists an so we just update it
-      // console.log('this note already exists');
-      // console.log(note);
-      // data = await fetchData(DOMAIN + `/api/test/`, { method: "POST", body: note });
-      // return;
-      data = await fetchData(DOMAIN + `/api/update-note/${noteId}/`, { method: "PATCH", body: note });
-      if (data != null) {
-        setSaving(false);
-        toast.success('saved successfully'); // may not be required for autosave
-        setSaved(true);
-        setIsEdited(false);
-        setModified(data.modified)
-        originalContent.current = data.content;
-        originalLabel.current = data.label;
-        originalAccess.current = data.private? 'private': 'public';
-      }
-    } else {
-      // create a new note
-      data = await fetchData(DOMAIN + "/api/create-note/", { method: "POST", body: note });
-      if (data != null) {
-        setNoteId(data.id); // set note id to the current note
-        setSaving(false);
-        setSaved(true);
-      }
-    }
-  };
+ 
+  
 
   return (
     <>
@@ -299,15 +320,18 @@ const handleContentChange = (newContent)=>{
                        <span className="text-nowrap">Edited {moment(modified).fromNow()}</span>
                     </div>
                   }
-                  
-                   <button onClick={()=>{setOpenModal(true)}}>
-                    <IconShare className="w-5 h-5"/>
-                   </button>
-                   {/* ! caution note will be null in some cases below I'll fix that later */}
-                   <IconStar onClick={toggleFavourite} className={`w-5 h-5 cursor-pointer ${note!=null && fav? 'fill-black dark:fill-gray-400': ''}`}/>
-                   <IconDots className="w-5 h-5"/>
+                   {isOwner() && <>
+                    <button onClick={()=>{setOpenModal(true)}}>
+                      <IconShare className="w-5 h-5"/>
+                    </button>
+                    {/* ! caution note will be null in some cases below I'll fix that later */}
+                    <IconStar onClick={toggleFavourite} className={`w-5 h-5 cursor-pointer ${note!=null && fav? 'fill-black dark:fill-gray-400': ''}`}/>
+                    <IconDots className="w-5 h-5"/>
+                   
+                   </>
+                   }
                 </div>
-                {note != null && 
+{/*                 {note != null && 
                 
                 <div class="flex -space-x-4 rtl:space-x-reverse mt-4">
                   <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
@@ -315,7 +339,7 @@ const handleContentChange = (newContent)=>{
                   <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" src="https://flowbite.com/docs/images/people/profile-picture-3.jpg" alt=""/>
                   <a class="flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800" href="#">+4</a>
                 </div>
-                }
+                } */}
         </div>
         </div>
 

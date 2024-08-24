@@ -1,4 +1,4 @@
-export const DOMAIN = 'http://127.0.0.1:8000'; // actual backend domain
+export const DOMAIN = 'http://10.132.235.181:8000'; // actual backend domain
 // export const DOMAIN = 'https://software-engineering-notes-project-backend.vercel.app'; // actual backend domain
 
 export const JSON_DOMAIN = 'Http://localhost:3000'; // json server domain
@@ -18,3 +18,27 @@ export const getRandomColor = ()=> {
     const randomIndex = Math.floor(Math.random() * colors.length);
     return colors[randomIndex];
 }
+
+export const saveLastVisited = ()=>{
+   localStorage.setItem('last_visited',  window.location.href);
+};
+
+export const useSetting = (key)=>{
+    const settings = JSON.parse(localStorage.getItem('settings')); 
+    return settings[key];
+};
+
+export const isOwner = ()=>{
+  return localStorage.getItem('get_notes_for') == localStorage.getItem('username');  
+};
+
+export const debounce = (func, delay)=>{
+    let timer;
+    return function(...args) { 
+      console.log(timer);
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  };

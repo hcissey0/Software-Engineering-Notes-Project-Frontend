@@ -1,6 +1,6 @@
-import React, { useRef, useState} from 'react'
+import React, { useEffect, useRef, useState} from 'react'
 import { fetchData } from '../../utils/jsonServer';
-import { DOMAIN } from '../../utils/global';
+import { debounce, DOMAIN } from '../../utils/global';
 import { Link } from 'react-router-dom';
 
 // ! BUG: changed the format for saving notes and this causes the backend server to crash when notes created prior to the change have to be searched 
@@ -10,26 +10,20 @@ import { Link } from 'react-router-dom';
 const SearchModal = ({openModal=true, setOpenModal}) => {
     const searchRef = useRef();
     const [results, setResults] = useState([]);
+    const handleSearch = useRef(); 
     // console.log('the results are', results);
     
     const getResults = async ()=>{
         const data = await fetchData(DOMAIN + `/api/search/?username=${localStorage.getItem('get_notes_for')}&q=${searchRef.current.value}`, {}); 
         setResults(data);
-        console.log(data);
+        // console.log(data);
         
     }; 
 
-    const debounce = (delay)=>{
-        let timer;
-        return function(...args) {
-          clearTimeout(timer);
-          timer = setTimeout(() => {
-            getResults.apply(this, args);
-          }, delay);
-        };
-      };
-
-    const handleSearch = debounce(800);
+    useEffect(()=>{
+      handleSearch.current = debounce(getResults, 800)
+    }, []);
+    
 
     const formatSearch = (item) => {
       const span = item.span; // start and end points in the full text where there is a match
@@ -76,7 +70,7 @@ const SearchModal = ({openModal=true, setOpenModal}) => {
                 autoFocus
                 spellCheck={false}
                 ref={searchRef}
-                onInput={handleSearch}
+                onInput={handleSearch.current}
                 className="block w-full p-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Search Notes ..."/>
                  
